@@ -1,5 +1,9 @@
 # Установка программного обеспечения IBM Optim
 
+[Оглавление статьи](OptimInstallSingleHost),
+[Предыдущий этап](OptimDb2Install),
+[Следующий этап](OptimInitialConfig).
+
 Выполняется:
 1. Установка программы IBM Installation Manager
 1. Распаковка основного дистрибутива IBM Optim и файлов обновлений
@@ -146,4 +150,6 @@ iFix (как показано на снимке экрана ниже). Обно
 удалены для экономии дискового пространства.
 
 
-Следующий этап - [настройка ядра Optim](OptimInitialConfig).
+[Оглавление статьи](OptimInstallSingleHost),
+[Предыдущий этап](OptimDb2Install),
+[Следующий этап](OptimInitialConfig).

@@ -1,5 +1,9 @@
 # Первоначальная настройка Web-приложений IBM Optim
 
+[Оглавление статьи](OptimInstallSingleHost),
+[Предыдущий этап](OptimWebConfig),
+[Следующий этап](OptimDesignerConfig).
+
 Для обеспечения автоматического запуска Web-приложений Optim при
 загрузке сервера необходимо настроить поставляемый в комплекте сервер
 приложений WAS CE для старта как сервиса Windows.
@@ -77,4 +81,6 @@ C:\IBM\InfoSphere\Optim\shared\WebSphere\AppServerCommunityEdition\bin>
 сервисного интерфейса также приведена
 [в документации](https://www.ibm.com/support/knowledgecenter/SSMLQ4_11.3.0/com.ibm.nex.install.doc/topics/opinstall_deploying_interface.html).
 
-Следующий этап - [настройка Optim Connection Manager и Optim Designer](OptimDesignerConfig).
+[Оглавление статьи](OptimInstallSingleHost),
+[Предыдущий этап](OptimWebConfig),
+[Следующий этап](OptimDesignerConfig).

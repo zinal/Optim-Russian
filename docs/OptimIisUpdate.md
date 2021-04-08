@@ -1,5 +1,9 @@
 # Применение обновлений IBM Information Server
 
+[Оглавление статьи](OptimInstallSingleHost),
+[Предыдущий этап](OptimIisInstall),
+[Следующий этап](OptimIisConfig).
+
 Выполняется:
 1. Обновление программы установки обновлений.
 1. Применение обновлений.
@@ -73,5 +77,6 @@ Information Server по ссылке
 
 ![Панель инструментов Information Server](images/iis-install-finished.png)
 
-
-Следующий этап - [настройка Information Server](OptimIisConfig).
+[Оглавление статьи](OptimInstallSingleHost),
+[Предыдущий этап](OptimIisInstall),
+[Следующий этап](OptimIisConfig).

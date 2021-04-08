@@ -1,5 +1,9 @@
 # Установка IBM Information Server из дистрибутива
 
+[Оглавление статьи](OptimInstallSingleHost),
+[Предыдущий этап](OptimIisInstall),
+[Следующий этап](OptimIisUpdate).
+
 Выполняется:
 1. Подготовка к установке IBM Information Server.
 1. Распаковка основного дистрибутива и лицензионного ключа.
@@ -153,4 +157,6 @@ instance on this computer."
 После завершения установки рекомендуется выполнить перезагрузку
 сервера.
 
-Следующий этап - [установка обновлений Information Server](OptimIisUpdate).
+[Оглавление статьи](OptimInstallSingleHost),
+[Предыдущий этап](OptimIisInstall),
+[Следующий этап](OptimIisUpdate).
