@@ -1,7 +1,8 @@
 # Настройка IBM Information Server для работы с IBM Optim
 
-Предыдущий этап:
-[установка обновлений Information Server](OptimIisUpdate).
+[Оглавление статьи](OptimInstallSingleHost),
+[Предыдущий этап](OptimIisUpdate),
+[Следующий этап](OptimIisClasses).
 
 Выполняется:
 1. Отключение автоматического запуска DataStage Flow Designer
@@ -76,3 +77,7 @@ delete import areas...", и нажать кнопку "Save".
 успешного выполнения операции.
 
 ![Импорт IADB 06](images/ia-config-imam06.png)
+
+[Оглавление статьи](OptimInstallSingleHost),
+[Предыдущий этап](OptimIisUpdate),
+[Следующий этап](OptimIisClasses).
