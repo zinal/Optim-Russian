@@ -1,7 +1,7 @@
 # Первоначальная настройка Web-приложений IBM Optim
 
 [Оглавление статьи](OptimInstallSingleHost),
-[Предыдущий этап](OptimWebConfig),
+[Предыдущий этап](OptimInitialConfig),
 [Следующий этап](OptimDesignerConfig).
 
 Для обеспечения автоматического запуска Web-приложений Optim при
@@ -82,5 +82,5 @@ C:\IBM\InfoSphere\Optim\shared\WebSphere\AppServerCommunityEdition\bin>
 [в документации](https://www.ibm.com/support/knowledgecenter/SSMLQ4_11.3.0/com.ibm.nex.install.doc/topics/opinstall_deploying_interface.html).
 
 [Оглавление статьи](OptimInstallSingleHost),
-[Предыдущий этап](OptimWebConfig),
+[Предыдущий этап](OptimInitialConfig),
 [Следующий этап](OptimDesignerConfig).
