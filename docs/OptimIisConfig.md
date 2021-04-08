@@ -30,7 +30,7 @@
 При необходимости запуск DataStage Flow Designer может быть выполнен вручную
 с помощью скрипта `startCognitiveDesignerServer.bat`, находящегося в подкаталоге
 `ASBNode\CognitiveDesignerEngine` каталога установки Information Server
-(по умолчанию `C:\IBM\InformationServer`),
+(по умолчанию `C:\IBM\InformationServer`).
 
 
 ## 2. Подключение к репозиторию Information Analyzer
