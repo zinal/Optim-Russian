@@ -1,0 +1,10 @@
+MVN="/opt/netbeans/v12.0/netbeans/java/maven/bin/mvn"
+"$MVN" --version
+
+https://www.ibm.com/docs/en/iis/11.7?topic=cdc-creating-custom-data-class-that-contains-java-classifier
+
+# DataQuality JAR
+"$MVN" install:install-file -Dfile=`pwd`/dataquality.jar \
+ -DgroupId=com.ibm.iis -DartifactId=dataquality -Dversion=11.7.1.1 -Dpackaging=jar
+"$MVN" install:install-file -Dfile=`pwd`/dataqualityjavadoc.zip \
+ -DgroupId=com.ibm.iis -DartifactId=dataquality -Dversion=11.7.1.1 -Dpackaging=jar -Dclassifier=javadoc

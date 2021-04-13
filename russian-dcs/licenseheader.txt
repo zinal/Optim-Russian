@@ -1,0 +1,25 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix} (c) Copyright IBM Corp. 2020 All rights reserved.
+${licensePrefix}
+${licensePrefix} The following sample of source code ("Sample") is owned by International
+${licensePrefix} Business Machines Corporation or one of its subsidiaries ("IBM") and is
+${licensePrefix} copyrighted and licensed, not sold. You may use, copy, modify, and
+${licensePrefix} distribute the Sample in any form without payment to IBM.
+${licensePrefix}
+${licensePrefix} The Sample code is provided to you on an "AS IS" basis, without warranty of
+${licensePrefix} any kind. 
+${licensePrefix} IBM HEREBY EXPRESSLY DISCLAIMS ALL WARRANTIES, EITHER EXPRESS OR
+${licensePrefix} IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+${licensePrefix} MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. Some jurisdictions do
+${licensePrefix} not allow for the exclusion or limitation of implied warranties, so the above
+${licensePrefix} limitations or exclusions may not apply to you. IBM shall not be liable for
+${licensePrefix} any damages you suffer as a result of using, copying, modifying or
+${licensePrefix} distributing the Sample, even if IBM has been advised of the possibility of
+${licensePrefix} such damages.
+${licensePrefix}
+${licensePrefix} Author:   Maksim Zinal <mzinal@ru.ibm.com>
+<#if licenseLast??>
+${licenseLast}
+</#if>
