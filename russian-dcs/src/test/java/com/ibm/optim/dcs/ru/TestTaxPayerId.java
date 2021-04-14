@@ -31,13 +31,31 @@ import org.junit.Test;
 public class TestTaxPayerId {
     
     @Test
-    public void testTPI() {
+    public void test12() {
         int[] inArray = new int[] {
             6, 9, 0, 5, 0, 4, 2, 3, 4, 9, 3, 2
         };
         String in = "\t69 050 423 4932 ";
         String norm = TaxPayerId.normalize(in);
         Assert.assertEquals("690504234932", norm);
+        TaxPayerId tpi = new TaxPayerId();
+        int[] digits = tpi.stringToDigits(norm);
+        Assert.assertEquals(norm.length(), digits.length);
+        Assert.assertArrayEquals(inArray, digits);
+        int c11 = TaxPayerId.getChecksum(digits, TaxPayerId.N11);
+        int c12 = TaxPayerId.getChecksum(digits, TaxPayerId.N12);
+        Assert.assertEquals(digits[digits.length - 2], c11);
+        Assert.assertEquals(digits[digits.length - 1], c12);
+    }
+    
+    @Test
+    public void test10() {
+        int[] inArray = new int[] {
+            7, 7, 0, 5, 0, 4, 1, 8, 6, 6
+        };
+        String in = " 77 050 418 66\t";
+        String norm = TaxPayerId.normalize(in);
+        Assert.assertEquals("7705041866", norm);
         TaxPayerId tpi = new TaxPayerId();
         int[] digits = tpi.stringToDigits(norm);
         Assert.assertEquals(norm.length(), digits.length);

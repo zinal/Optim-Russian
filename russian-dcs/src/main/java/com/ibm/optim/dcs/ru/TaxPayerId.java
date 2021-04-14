@@ -31,9 +31,10 @@ import java.util.regex.Pattern;
  */
 public class TaxPayerId implements ValueBasedClassifier {
 
-    public static final int[] N10 = {2, 4, 10, 3, 5, 9, 4, 6, 8};
-    public static final int[] N11 = {7, 2, 4, 10, 3, 5, 9, 4, 6, 8};
-    public static final int[] N12 = {3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8};
+    //                               0  1  2  3  4  5  6  7  8  9  10
+    public static final int[] N10 = {2, 4,10, 3, 5, 9, 4, 6, 8};
+    public static final int[] N11 = {7, 2, 4,10, 3, 5, 9, 4, 6, 8};
+    public static final int[] N12 = {3, 7, 2, 4,10, 3, 5, 9, 4, 6, 8};
 
     private final Pattern innPattern = Pattern.compile("\\d{10}|\\d{12}");
 
@@ -68,7 +69,10 @@ public class TaxPayerId implements ValueBasedClassifier {
         for (int i = 0; i < multipliers.length; i++) {
             checksum += digits[i] * multipliers[i];
         }
-        return (checksum % 11) % 10;
+        checksum = checksum % 11;
+        if (checksum > 9)
+            checksum = 0;
+        return checksum;
     }
     
     // Сокращаем выделение памяти при работе stringToDigits().
