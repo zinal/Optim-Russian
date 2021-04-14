@@ -42,7 +42,6 @@ public class TaxPayerId implements ValueBasedClassifier {
     public boolean matchValue(Object value) {
         if (value==null)
             return false;
-        // Переводим в строку и удаляем все пробелы
         String strValue = normalize(value);
         if (!innPattern.matcher(strValue).matches())
             return false; // Не соответствует формату
@@ -60,8 +59,9 @@ public class TaxPayerId implements ValueBasedClassifier {
         }
     }
     
+    // Переводим в строку и удаляем все нечисловые символы
     public static String normalize(Object value) {
-        return value.toString().trim().replaceAll("\\s", "");
+        return value.toString().trim().replaceAll("[^\\d]", "");
     }
 
     public static int getChecksum(int[] digits, int[] multipliers) {
