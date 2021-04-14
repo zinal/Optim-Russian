@@ -41,7 +41,10 @@ import java.util.HashSet;
  */
 public class DcsDict {
 
-    private static final HashMap<String, DcsDict> dicts = new HashMap<>();
+    private static final Object GUARD = new Object();
+    private static String BASE_PATH = null;
+
+    private static final HashMap<String, DcsDict> DICTS = new HashMap<>();
     private final HashSet<String> values = new HashSet<>();
 
     /**
@@ -128,7 +131,19 @@ public class DcsDict {
      * Получить путь к каталогу хранения файлов со справочниками.
      * @return Путь к каталогу со справочниками.
      */
-    private static String getBasePath() {
+    public static String getBasePath() {
+        synchronized(GUARD) {
+            if (BASE_PATH==null || BASE_PATH.length()==0)
+                BASE_PATH = computeBasePath();
+            return BASE_PATH;
+        }
+    }
+
+    /**
+     * Определить путь к каталогу хранения файлов со справочниками.
+     * @return Путь к каталогу со справочниками.
+     */
+    private static String computeBasePath() {
         String basePath = System.getenv("OPTIM_DCS_DICT");
         if (basePath == null || basePath.length()==0) {
             if ( "\\".equals(File.pathSeparator) ) {
@@ -138,6 +153,16 @@ public class DcsDict {
             }
         }
         return basePath;
+    }
+
+    public static void setBasePath(String basePath) {
+        synchronized(GUARD) {
+            BASE_PATH = basePath;
+        }
+    }
+
+    public static void setBasePath(File basePath) {
+        setBasePath(basePath==null ? (String)null : basePath.getAbsolutePath());
     }
 
     /**
@@ -151,11 +176,11 @@ public class DcsDict {
         if (dictName.length()==0)
             dictName = "default";
         DcsDict d;
-        synchronized(dicts) {
-            d = dicts.get(dictName);
+        synchronized(DICTS) {
+            d = DICTS.get(dictName);
             if (d==null) {
                 d = new DcsDict(dictName);
-                dicts.put(dictName, d);
+                DICTS.put(dictName, d);
             }
         }
         return d;

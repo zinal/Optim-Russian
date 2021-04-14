@@ -69,7 +69,7 @@ public class NamesTool {
         if (value.length() > male.length() && value.endsWith(male)) {
             candidate = value.substring(0, value.length() - male.length()) + female;
         } else if (value.length() > female.length() && value.endsWith(female)) {
-            candidate = value.substring(0, value.length() - male.length()) + male;
+            candidate = value.substring(0, value.length() - female.length()) + male;
         }
         if (candidate != null) {
             if (!input.containsDirect(candidate))
