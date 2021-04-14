@@ -21,6 +21,15 @@
  */
 package com.ibm.optim.dcs.ru;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Вспомогательные алгоритмы.
  * @author zinal
@@ -42,6 +51,27 @@ public class DcsUtil {
             return str.replaceAll("[^\\d]", "");
         }
         return value.toString().trim().replaceAll("[^\\d]", "");
+    }
+
+    public static void logException(Exception ex) {
+        try {
+            File f = new File(new File(System.getProperty("java.io.tmpdir")),
+               "ia-DcsRus_"
+                    + new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS").format(new Date())
+                    + ".txt");
+            PrintWriter out = new PrintWriter(
+                new BufferedWriter(
+                        new OutputStreamWriter(
+                                new FileOutputStream(f, true),
+                                StandardCharsets.UTF_8)));
+            try {
+                ex.printStackTrace(out);
+                out.println();
+                out.println();
+            } finally {
+                out.close();
+            }
+        } catch(Exception skip) {}
     }
 
 }

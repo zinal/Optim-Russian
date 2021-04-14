@@ -1,13 +1,13 @@
 /*
  *  (c) Copyright IBM Corp. 2021 All rights reserved.
- * 
+ *
  *  The following sample of source code ("Sample") is owned by International
  *  Business Machines Corporation or one of its subsidiaries ("IBM") and is
  *  copyrighted and licensed, not sold. You may use, copy, modify, and
  *  distribute the Sample in any form without payment to IBM.
- * 
+ *
  *  The Sample code is provided to you on an "AS IS" basis, without warranty of
- *  any kind. 
+ *  any kind.
  *  IBM HEREBY EXPRESSLY DISCLAIMS ALL WARRANTIES, EITHER EXPRESS OR
  *  IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  *  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. Some jurisdictions do
@@ -16,7 +16,7 @@
  *  any damages you suffer as a result of using, copying, modifying or
  *  distributing the Sample, even if IBM has been advised of the possibility of
  *  such damages.
- * 
+ *
  *  Author:   Maksim Zinal <mzinal@ru.ibm.com>
  */
 package com.ibm.optim.dcs.ru;
@@ -28,7 +28,7 @@ import com.ibm.infosphere.classification.ValueBasedClassifier;
  * @author zinal
  */
 public class PostalAddress implements ValueBasedClassifier {
-    
+
     private DcsDict cities = null;
     private DcsDict regions = null;
     private DcsDict mapObjects = null;
@@ -47,8 +47,8 @@ public class PostalAddress implements ValueBasedClassifier {
             t = DcsDict.normalize(t);
             if (t.length()==0)
                 continue;
-            if (getMapObjects().containsDirect(t) 
-                    || getDistObjects().containsDirect(t) 
+            if (getMapObjects().containsDirect(t)
+                    || getDistObjects().containsDirect(t)
                     || getCityObjects().containsDirect(t)
                     || getBldObjects().containsDirect(t)
                     || getRegions().containsDirect(t)) {
@@ -58,7 +58,7 @@ public class PostalAddress implements ValueBasedClassifier {
             if (!isCityName) {
                 if (getCities().contains(t)) {
                     counter ++;
-                    isCityName = true;                                      
+                    isCityName = true;
                 }
             }
         }
@@ -67,37 +67,37 @@ public class PostalAddress implements ValueBasedClassifier {
 
     public DcsDict getCities() {
         if (cities==null)
-            cities = DcsDict.dictionary("PA_cities");
+            cities = DcsDict.dictionary("Addr_cities");
         return cities;
     }
 
     public DcsDict getRegions() {
         if (regions==null)
-            regions = DcsDict.dictionary("PA_regions");
+            regions = DcsDict.dictionary("Addr_regions");
         return regions;
     }
 
     public DcsDict getMapObjects() {
         if (mapObjects==null)
-            mapObjects = DcsDict.dictionary("PA_mapObjects");
+            mapObjects = DcsDict.dictionary("Addr_mapObjects");
         return mapObjects;
     }
 
     public DcsDict getDistObjects() {
         if (distObjects==null)
-            distObjects = DcsDict.dictionary("PA_distObjects");
+            distObjects = DcsDict.dictionary("Addr_distObjects");
         return distObjects;
     }
 
     public DcsDict getCityObjects() {
         if (cityObjects==null)
-            cityObjects = DcsDict.dictionary("PA_cityObjects");
+            cityObjects = DcsDict.dictionary("Addr_cityObjects");
         return cityObjects;
     }
 
     public DcsDict getBldObjects() {
         if (bldObjects==null)
-            bldObjects = DcsDict.dictionary("PA_bldObjects");
+            bldObjects = DcsDict.dictionary("Addr_bldObjects");
         return bldObjects;
     }
 
