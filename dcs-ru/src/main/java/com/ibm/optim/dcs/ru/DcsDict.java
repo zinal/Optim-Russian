@@ -21,10 +21,17 @@
  */
 package com.ibm.optim.dcs.ru;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -56,6 +63,24 @@ public class DcsDict {
     }
 
     /**
+     * Доступ к перечню элементов.
+     * @return Перечень элементов
+     */
+    public Collection<String> getEntries() {
+        return Collections.unmodifiableCollection(values);
+    }
+    
+    /**
+     * Добавить значение в справочник.
+     * @param value Добавляемое значение
+     */
+    public void add(String value) {
+        value = normalize(value);
+        if (value.length() > 0)
+            values.add(value);
+    }
+
+    /**
      * Нормализация значения
      * @param value Значение до нормализации
      * @return Нормализованное значение:
@@ -65,7 +90,9 @@ public class DcsDict {
      */
     public static String normalize(String value) {
         value = (value==null) ? "" :
-                value.trim().replaceAll("\\s{2,}", " ").toLowerCase();
+                value.trim().replaceAll("\\s{2,}", " ")
+                     .toLowerCase()
+                     .replace('ё', 'е');
         return value;
     }
 
@@ -74,7 +101,15 @@ public class DcsDict {
      * @param dictName Имя справочника
      */
     private DcsDict(String dictName) {
-        final Path f = new File(getBasePath(), dictName + ".txt").toPath();
+        this(new File(getBasePath(), dictName + ".txt"));
+    }
+
+    /**
+     * Загрузка справочника из файла
+     * @param file Файл со справочником
+     */
+    public DcsDict(File file) {
+        final Path f = file.toPath();
         try {
             Files.lines(f, StandardCharsets.UTF_8).forEach(
                 s -> {
@@ -124,6 +159,21 @@ public class DcsDict {
             }
         }
         return d;
+    }
+    
+    public void save(File file) throws IOException {
+        PrintWriter out = new PrintWriter(
+            new BufferedWriter(
+                    new OutputStreamWriter(
+                            new FileOutputStream(file, false),
+                            StandardCharsets.UTF_8)));
+        try {
+            for (String v : values) {
+                out.println(v);
+            }
+        } finally {
+            out.close();
+        }
     }
 
 }
