@@ -56,4 +56,13 @@ public abstract class NamesBase {
         return namesItems;
     }
 
+    /**
+     * Нормализация и деление имени на части
+     * @param value Входное значение
+     * @return Компоненты имени
+     */
+    public String[] extract(Object value) {
+        return DcsDict.normalize(value.toString().replace('-', ' ')).split(" ");
+    }
+
 }

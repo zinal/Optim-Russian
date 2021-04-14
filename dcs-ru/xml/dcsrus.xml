@@ -13,4 +13,34 @@ xsi:schemaLocation="http://www.ibm.com/infosphere/ia/classification/DataclassesD
          <tns:LogicalDataType>string</tns:LogicalDataType>
       </tns:DataTypeFilter>
    </tns:DataClass>
+   <tns:DataClass id="PA_Rus" name="Организация, выдавшая документ" description="Проверка поля на организацию, выдавшую документ">
+      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.PassportAuthority" />
+      <tns:DataTypeFilter>
+         <tns:LogicalDataType>string</tns:LogicalDataType>
+      </tns:DataTypeFilter>
+   </tns:DataClass>
+   <tns:DataClass id="NameFirst_Rus" name="Имя на русском языке" description="Проверка поля на значение имени">
+      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.NameFirst" />
+      <tns:DataTypeFilter>
+         <tns:LogicalDataType>string</tns:LogicalDataType>
+      </tns:DataTypeFilter>
+   </tns:DataClass>
+   <tns:DataClass id="NameMiddle_Rus" name="Отчество на русском языке" description="Проверка поля на значение отчества">
+      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.NameMiddle" />
+      <tns:DataTypeFilter>
+         <tns:LogicalDataType>string</tns:LogicalDataType>
+      </tns:DataTypeFilter>
+   </tns:DataClass>
+   <tns:DataClass id="NameLast_Rus" name="Фамилия на русском языке" description="Проверка поля на значение фамилии">
+      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.NameLast" />
+      <tns:DataTypeFilter>
+         <tns:LogicalDataType>string</tns:LogicalDataType>
+      </tns:DataTypeFilter>
+   </tns:DataClass>
+   <tns:DataClass id="NameFull_Rus" name="Полное ФИО на русском языке" description="Проверка поля на значение ФИО">
+      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.NameFull" />
+      <tns:DataTypeFilter>
+         <tns:LogicalDataType>string</tns:LogicalDataType>
+      </tns:DataTypeFilter>
+   </tns:DataClass>
 </tns:DataClasses>

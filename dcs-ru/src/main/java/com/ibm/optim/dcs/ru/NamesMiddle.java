@@ -33,7 +33,18 @@ public class NamesMiddle extends NamesBase implements ValueBasedClassifier {
     public boolean matchValue(Object value) {
         if (value==null)
             return false;
-        return getNamesMiddle().contains(value.toString());
+        boolean found = false;
+        for (String item : extract(value)) {
+            if (item.length()==0)
+                continue;
+            if ( getNamesMiddle().containsDirect(item) ) {
+                found = true;
+            } else if ( ! getNamesItems().containsDirect(item) ) {
+                // Не похоже на имя, и не типичное междомение в середине.
+                return false;
+            }
+        }
+        return found;
     }
 
 }

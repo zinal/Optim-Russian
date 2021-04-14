@@ -33,9 +33,8 @@ public class NamesFull extends NamesBase implements ValueBasedClassifier {
     public boolean matchValue(Object value) {
         if (value==null)
             return false;
-        String str = DcsDict.normalize(value.toString().replace('-', ' '));
         boolean nf = false, nm = false, nl = false;
-        for (String item : str.split(" ")) {
+        for (String item : extract(value)) {
             if (item.length()==0)
                 continue;
             if ( getNamesFirst().containsDirect(item) ) {
