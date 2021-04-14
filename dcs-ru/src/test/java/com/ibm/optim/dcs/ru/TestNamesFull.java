@@ -21,39 +21,41 @@
  */
 package com.ibm.optim.dcs.ru;
 
+import java.io.File;
+import org.junit.Assert;
+import org.junit.Test;
+
 /**
- * Доступ к справочникам имён, фамилий и отчеств.
+ *
  * @author zinal
  */
-public abstract class NamesBase {
+public class TestNamesFull {
     
-    private DcsDict namesFirst = null;
-    private DcsDict namesMiddle = null;
-    private DcsDict namesLast = null;
-    private DcsDict namesItems = null;
-
-    public final DcsDict getNamesFirst() {
-        if (namesFirst == null)
-            namesFirst = DcsDict.dictionary("Names_First");
-        return namesFirst;
+    @Test
+    public void test() {
+        final File dictBase = new File(new File("").getAbsoluteFile(), "dict");
+        DcsDict.setBasePath(dictBase);
+        System.out.println("Dictionaries directory: " + dictBase);
+        
+        final NamesFull nf = new NamesFull();
+        String in;
+        boolean out;
+        
+        in = "Пагосян Гагик Спартакович-оглы";
+        out = nf.matchValue(in);
+        Assert.assertEquals(in, true, out);
+        
+        in = "Иван Иванов";
+        out = nf.matchValue(in);
+        Assert.assertEquals(in, true, out);
+        
+        in = "Петров Пётр Петрович";
+        out = nf.matchValue(in);
+        Assert.assertEquals(in, true, out);
+        
+        in = "Служил Гаврила программистом";
+        out = nf.matchValue(in);
+        Assert.assertEquals(in, false, out);
     }
-
-    public final DcsDict getNamesMiddle() {
-        if (namesMiddle == null)
-            namesMiddle = DcsDict.dictionary("Names_Middle");
-        return namesMiddle;
-    }
-
-    public final DcsDict getNamesLast() {
-        if (namesLast == null)
-            namesLast = DcsDict.dictionary("Names_Last");
-        return namesLast;
-    }
-
-    public final DcsDict getNamesItems() {
-        if (namesItems == null)
-            namesItems = DcsDict.dictionary("Names_Items");
-        return namesItems;
-    }
-
+    
 }

@@ -33,8 +33,28 @@ public class NamesFull extends NamesBase implements ValueBasedClassifier {
     public boolean matchValue(Object value) {
         if (value==null)
             return false;
-        // TODO: реализация
-        return getNamesFirst().contains(value.toString());
+        String str = DcsDict.normalize(value.toString().replace('-', ' '));
+        boolean nf = false, nm = false, nl = false;
+        for (String item : str.split(" ")) {
+            if (item.length()==0)
+                continue;
+            if ( getNamesFirst().containsDirect(item) ) {
+                nf = true;
+            } else if ( getNamesMiddle().containsDirect(item) ) {
+                nm = true;
+            } else if ( getNamesLast().containsDirect(item) ) {
+                nl = true;
+            } else if ( ! getNamesItems().containsDirect(item) ) {
+                // Не похоже на имя, и не типичное междомение в середине.
+                return false;
+            }
+        }
+        int count = 0;
+        if (nf) ++count;
+        if (nm) ++count;
+        if (nl) ++count;
+        // Встретилось минимум 2 компонента в любом составе и порядке.
+        return (count > 1);
     }
 
 }
