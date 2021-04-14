@@ -77,7 +77,11 @@ public class DcsDict {
         final Path f = new File(getBasePath(), dictName + ".txt").toPath();
         try {
             Files.lines(f, StandardCharsets.UTF_8).forEach(
-                    s -> values.add(normalize(s))
+                s -> {
+                    String n = normalize(s);
+                    if (n.length() > 0)
+                        values.add(n);
+                }
             );
         } catch(Exception ex) {
             ex.printStackTrace(System.out);
