@@ -65,7 +65,7 @@ public class DcsDict {
      */
     public static String normalize(String value) {
         value = (value==null) ? "" :
-                value.replaceAll("\\s{2,}", " ").trim().toLowerCase();
+                value.trim().replaceAll("\\s{2,}", " ").toLowerCase();
         return value;
     }
 
@@ -84,7 +84,6 @@ public class DcsDict {
                 }
             );
         } catch(Exception ex) {
-            ex.printStackTrace(System.out);
             DcsUtil.logException(ex);
         }
         values.remove("");

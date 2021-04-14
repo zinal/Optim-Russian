@@ -54,6 +54,7 @@ public class DcsUtil {
     }
 
     public static void logException(Exception ex) {
+        ex.printStackTrace(System.out);
         try {
             File f = new File(new File(System.getProperty("java.io.tmpdir")),
                "ia-DcsRus_"
