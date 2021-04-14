@@ -1,0 +1,6 @@
+
+USER = 'isadmin'
+PASSWORD = 'P@ssw0rd'
+URL = 'https://iswrk01:9443'
+
+IAAdmin
