@@ -47,7 +47,7 @@ public class SNILS implements ValueBasedClassifier {
         if (snils.length != 11 || control.length != 2)
             return false; // Не должно происходить
         return (control[0] == snils[snils.length-2])
-                && (control[0] == snils[snils.length-1]);
+                && (control[1] == snils[snils.length-1]);
     }
 
     public static String normalize(Object value) {
