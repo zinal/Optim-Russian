@@ -74,4 +74,17 @@ public class TestTaxPayerId {
         Assert.assertEquals(digits[digits.length - 1], c10);
     }
 
+    @Test
+    public void testFull() {
+        String in1 = "631629095237";
+        boolean res1 = new TaxPayerId().matchValue(in1);
+        Assert.assertEquals(true, res1);
+        String in2 = "631695237";
+        boolean res2 = new TaxPayerId().matchValue(in2);
+        Assert.assertEquals(false, res2);
+        String in3 = "631629095239";
+        boolean res3 = new TaxPayerId().matchValue(in3);
+        Assert.assertEquals(false, res3);
+    }
+
 }
