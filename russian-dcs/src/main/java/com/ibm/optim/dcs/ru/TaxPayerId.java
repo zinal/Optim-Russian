@@ -31,18 +31,20 @@ import java.util.regex.Pattern;
  */
 public class TaxPayerId implements ValueBasedClassifier {
 
-    private static final int[] N10 = {2, 4, 10, 3, 5, 9, 4, 6, 8};
-    private static final int[] N11 = {7, 2, 4, 10, 3, 5, 9, 4, 6, 8};
-    private static final int[] N12 = {3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8};
+    public static final int[] N10 = {2, 4, 10, 3, 5, 9, 4, 6, 8};
+    public static final int[] N11 = {7, 2, 4, 10, 3, 5, 9, 4, 6, 8};
+    public static final int[] N12 = {3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8};
+
     private final Pattern innPattern = Pattern.compile("\\d{10}|\\d{12}");
 
     @Override
     public boolean matchValue(Object value) {
         if (value==null)
             return false;
-        String strValue = value.toString();
+        // Переводим в строку и удаляем все пробелы
+        String strValue = normalize(value);
         if (!innPattern.matcher(strValue).matches())
-            return false;
+            return false; // Не соответствует формату
         int[] inn = stringToDigits(strValue);
         switch (inn.length) {
             case 12:
@@ -52,24 +54,41 @@ public class TaxPayerId implements ValueBasedClassifier {
             case 10:
                 int n = getChecksum(inn, N10);
                 return inn[inn.length - 1] == n;
-            default:
+            default: // На практике срабатывать не должно
                 return false;
         }
     }
+    
+    public static String normalize(Object value) {
+        return value.toString().trim().replaceAll("\\s", "");
+    }
 
-    private static int getChecksum(int[] digits, int[] multipliers) {
+    public static int getChecksum(int[] digits, int[] multipliers) {
         int checksum = 0;
         for (int i = 0; i < multipliers.length; i++) {
             checksum += digits[i] * multipliers[i];
         }
         return (checksum % 11) % 10;
     }
+    
+    // Сокращаем выделение памяти при работе stringToDigits().
+    private final int[] work10 = new int[10];
+    private final int[] work12 = new int[12];
 
-    private static int[] stringToDigits(String value) {
-        char[] values = value.toCharArray();
-        int[] digits = new int[values.length];
-        for (int i = 0; i < values.length; i++) {
-            digits[i] = Character.getNumericValue(values[i]);
+    public int[] stringToDigits(String value) {
+        int len = value.length();
+        int[] digits = work12;
+        if (len<work12.length) {
+            digits = work10;
+            len = work10.length;
+        } else if (len>work12.length) {
+            len = work12.length;
+        }
+        for (int i=0; i<len; ++i) {
+            if ( i < value.length() )
+                digits[i] = Character.getNumericValue(value.charAt(i));
+            else
+                digits[i] = 0;
         }
         return digits;
     }
