@@ -1,44 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tns:DataClasses xmlns:tns="http://www.ibm.com/infosphere/ia/classification/DataclassesDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-xsi:schemaLocation="http://www.ibm.com/infosphere/ia/classification/DataclassesDefinition/../../../model/DataClassesDefinition.xsd ">
-   <tns:DataClass id="PA_Rus" name="Почтовый адрес" description="Проверка поля на почтовый адрес">
-      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.PostalAddress" />
+<tns:DataClasses xmlns:tns="http://www.ibm.com/infosphere/ia/classification/DataclassesDefinition" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.ibm.com/infosphere/ia/classification/DataclassesDefinition/ ../../../model/DataClassesDefinition.xsd ">
+   <tns:DataClass id="OGRN_Rus" name="ОГРН" 
+                  description="ОГРН для юридических лиц и индивидуальных предпринимателей">
+      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.OGRN" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
+         <tns:LogicalDataType>numeric</tns:LogicalDataType>
       </tns:DataTypeFilter>
    </tns:DataClass>
-   <tns:DataClass id="INN_Rus" name="ИНН" description="Идентификационный номер налогоплательщика (ИНН)">
+   <tns:DataClass id="INN_Rus" name="ИНН" 
+                  description="Идентификационный номер налогоплательщика">
       <tns:JavaClassifier className="com.ibm.optim.dcs.ru.TaxPayerId" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
+         <tns:LogicalDataType>numeric</tns:LogicalDataType>
       </tns:DataTypeFilter>
    </tns:DataClass>
-   <tns:DataClass id="PA_Rus" name="Организация, выдавшая документ" description="Проверка поля на организацию, выдавшую документ">
+   <tns:DataClass id="SNILS_Rus" name="СНИЛС" 
+                  description="Страховой номер индивидуального лицевого счёта">
+      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.SNILS" />
+      <tns:DataTypeFilter>
+         <tns:LogicalDataType>string</tns:LogicalDataType>
+         <tns:LogicalDataType>numeric</tns:LogicalDataType>
+      </tns:DataTypeFilter>
+   </tns:DataClass>
+   <tns:DataClass id="NID_Org_Rus" name="Организация, выдавшая документ" 
+                  description="Организация, выдавшая документ, удостоверяющий личность">
       <tns:JavaClassifier className="com.ibm.optim.dcs.ru.PassportAuthority" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
       </tns:DataTypeFilter>
    </tns:DataClass>
-   <tns:DataClass id="NameFirst_Rus" name="Имя на русском языке" description="Проверка поля на значение имени">
-      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.NameFirst" />
+   <tns:DataClass id="NID_Dom_Rus" name="Номер паспорта гражданина" 
+                  description="Номер внутреннего паспорта гражданина Российской Федерации">
+      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.PassportDomestic" />
+      <tns:DataTypeFilter>
+         <tns:LogicalDataType>string</tns:LogicalDataType>
+         <tns:LogicalDataType>numeric</tns:LogicalDataType>
+      </tns:DataTypeFilter>
+   </tns:DataClass>
+   <tns:DataClass id="NID_Frn_Rus" name="Номер заграничного паспорта" 
+                  description="Номер заграничного паспорта гражданина Российской Федерации">
+      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.PassportForeign" />
+      <tns:DataTypeFilter>
+         <tns:LogicalDataType>string</tns:LogicalDataType>
+         <tns:LogicalDataType>numeric</tns:LogicalDataType>
+      </tns:DataTypeFilter>
+   </tns:DataClass>
+   <tns:DataClass id="NameFirst_Rus" name="Личное имя" 
+                  description="Имя на русском языке">
+      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.NamesFirst" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
       </tns:DataTypeFilter>
    </tns:DataClass>
-   <tns:DataClass id="NameMiddle_Rus" name="Отчество на русском языке" description="Проверка поля на значение отчества">
-      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.NameMiddle" />
+   <tns:DataClass id="NameMiddle_Rus" name="Личное отчество" 
+                  description="Отчество на русском языке">
+      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.NamesMiddle" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
       </tns:DataTypeFilter>
    </tns:DataClass>
-   <tns:DataClass id="NameLast_Rus" name="Фамилия на русском языке" description="Проверка поля на значение фамилии">
-      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.NameLast" />
+   <tns:DataClass id="NameLast_Rus" name="Личная фамилия"
+                  description="Фамилия на русском языке">
+      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.NamesLast" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
       </tns:DataTypeFilter>
    </tns:DataClass>
-   <tns:DataClass id="NameFull_Rus" name="Полное ФИО на русском языке" description="Проверка поля на значение ФИО">
-      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.NameFull" />
+   <tns:DataClass id="NameFull_Rus" name="Личные фамилия, имя, отчество" 
+                  description="Полное значение фамилии, имени, отчества на русском языке">
+      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.NamesFull" />
+      <tns:DataTypeFilter>
+         <tns:LogicalDataType>string</tns:LogicalDataType>
+      </tns:DataTypeFilter>
+   </tns:DataClass>
+   <tns:DataClass id="NameAbbr_Rus" name="Личные фамилия и инициалы" 
+                  description="Фамилия и инициалы на русском языке">
+      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.NamesAbbr" />
+      <tns:DataTypeFilter>
+         <tns:LogicalDataType>string</tns:LogicalDataType>
+      </tns:DataTypeFilter>
+   </tns:DataClass>
+   <tns:DataClass id="PA_Rus" name="Почтовый адрес" 
+                  description="Почтовый адрес в Российской Федерации">
+      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.PostalAddress" />
+      <tns:DataTypeFilter>
+         <tns:LogicalDataType>string</tns:LogicalDataType>
+      </tns:DataTypeFilter>
+   </tns:DataClass>
+   <tns:DataClass id="Prof_Rus" name="Название профессии" 
+                  description="Название профессии">
+      <tns:JavaClassifier className="com.ibm.optim.dcs.ru.Professions" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
       </tns:DataTypeFilter>
