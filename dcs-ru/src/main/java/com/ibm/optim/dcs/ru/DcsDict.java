@@ -27,24 +27,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 
 /**
  * Простой справочник значений, загружаемый из текстового файла.
  * @author zinal
  */
-public class DcsDict {
+public class DcsDict implements Serializable {
+    private static final long serialVersionUID = 20210415001L;
 
-    private static final Object GUARD = new Object();
-    private static String BASE_PATH = null;
-
-    private static final HashMap<String, DcsDict> DICTS = new HashMap<>();
     private final HashSet<String> values = new HashSet<>();
 
     /**
@@ -101,14 +98,6 @@ public class DcsDict {
 
     /**
      * Загрузка справочника из файла
-     * @param dictName Имя справочника
-     */
-    private DcsDict(String dictName) {
-        this(new File(getBasePath(), dictName + ".txt"));
-    }
-
-    /**
-     * Загрузка справочника из файла
      * @param file Файл со справочником
      */
     public DcsDict(File file) {
@@ -127,65 +116,6 @@ public class DcsDict {
         values.remove("");
     }
 
-    /**
-     * Получить путь к каталогу хранения файлов со справочниками.
-     * @return Путь к каталогу со справочниками.
-     */
-    public static String getBasePath() {
-        synchronized(GUARD) {
-            if (BASE_PATH==null || BASE_PATH.length()==0)
-                BASE_PATH = computeBasePath();
-            return BASE_PATH;
-        }
-    }
-
-    /**
-     * Определить путь к каталогу хранения файлов со справочниками.
-     * @return Путь к каталогу со справочниками.
-     */
-    private static String computeBasePath() {
-        String basePath = System.getenv("OPTIM_DCS_DICT");
-        if (basePath == null || basePath.length()==0) {
-            if ( "\\".equals(File.pathSeparator) ) {
-                basePath = "/opt/IBM/Masking/DCS/dict";
-            } else {
-                basePath = "C:\\IBM\\Masking\\DCS\\dict";
-            }
-        }
-        return basePath;
-    }
-
-    public static void setBasePath(String basePath) {
-        synchronized(GUARD) {
-            BASE_PATH = basePath;
-        }
-    }
-
-    public static void setBasePath(File basePath) {
-        setBasePath(basePath==null ? (String)null : basePath.getAbsolutePath());
-    }
-
-    /**
-     * Получить справочник с указанным именем
-     * @param dictName Имя справочника
-     * @return Объект справочника
-     */
-    public static DcsDict dictionary(String dictName) {
-        dictName = (dictName==null) ? "" :
-                dictName.replaceAll("\\s{2,}", " ").trim();
-        if (dictName.length()==0)
-            dictName = "default";
-        DcsDict d;
-        synchronized(DICTS) {
-            d = DICTS.get(dictName);
-            if (d==null) {
-                d = new DcsDict(dictName);
-                DICTS.put(dictName, d);
-            }
-        }
-        return d;
-    }
-    
     public void save(File file) throws IOException {
         PrintWriter out = new PrintWriter(
             new BufferedWriter(

@@ -34,7 +34,7 @@ public class TestNamesAbbr {
     @Test
     public void test() {
         final File dictBase = new File(new File("").getAbsoluteFile(), "dict");
-        DcsDict.setBasePath(dictBase);
+        DcsFactory.setBasePath(dictBase);
         
         final NamesAbbr na = new NamesAbbr();
         String in;

@@ -29,7 +29,7 @@ import com.ibm.infosphere.classification.ValueBasedClassifier;
  */
 public class Professions implements ValueBasedClassifier {
 
-    private DcsDict professions = null;
+    private transient DcsDict professions = null;
 
     @Override
     public boolean matchValue(Object value) {
@@ -40,7 +40,7 @@ public class Professions implements ValueBasedClassifier {
 
     private DcsDict getProfessions() {
         if (professions == null)
-            professions = DcsDict.dictionary("Professions");
+            professions = DcsFactory.dictionary("Professions");
         return professions;
     }
 

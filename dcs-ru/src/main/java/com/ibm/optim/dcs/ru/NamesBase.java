@@ -27,32 +27,32 @@ package com.ibm.optim.dcs.ru;
  */
 public abstract class NamesBase {
     
-    private DcsDict namesFirst = null;
-    private DcsDict namesMiddle = null;
-    private DcsDict namesLast = null;
-    private DcsDict namesItems = null;
+    private transient DcsDict namesFirst = null;
+    private transient DcsDict namesMiddle = null;
+    private transient DcsDict namesLast = null;
+    private transient DcsDict namesItems = null;
 
     public final DcsDict getNamesFirst() {
         if (namesFirst == null)
-            namesFirst = DcsDict.dictionary("Names_First");
+            namesFirst = DcsFactory.dictionary("Names_First");
         return namesFirst;
     }
 
     public final DcsDict getNamesMiddle() {
         if (namesMiddle == null)
-            namesMiddle = DcsDict.dictionary("Names_Middle");
+            namesMiddle = DcsFactory.dictionary("Names_Middle");
         return namesMiddle;
     }
 
     public final DcsDict getNamesLast() {
         if (namesLast == null)
-            namesLast = DcsDict.dictionary("Names_Last");
+            namesLast = DcsFactory.dictionary("Names_Last");
         return namesLast;
     }
 
     public final DcsDict getNamesItems() {
         if (namesItems == null)
-            namesItems = DcsDict.dictionary("Names_Items");
+            namesItems = DcsFactory.dictionary("Names_Items");
         return namesItems;
     }
 

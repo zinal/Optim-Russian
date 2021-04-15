@@ -34,7 +34,7 @@ public class TestNamesFull {
     @Test
     public void test() {
         final File dictBase = new File(new File("").getAbsoluteFile(), "dict");
-        DcsDict.setBasePath(dictBase);
+        DcsFactory.setBasePath(dictBase);
         System.out.println("Dictionaries directory: " + dictBase);
         
         final NamesFull nf = new NamesFull();

@@ -29,12 +29,12 @@ import com.ibm.infosphere.classification.ValueBasedClassifier;
  */
 public class PostalAddress implements ValueBasedClassifier {
 
-    private DcsDict cities = null;
-    private DcsDict regions = null;
-    private DcsDict mapObjects = null;
-    private DcsDict distObjects = null;
-    private DcsDict cityObjects = null;
-    private DcsDict bldObjects = null;
+    private transient DcsDict cities = null;
+    private transient DcsDict regions = null;
+    private transient DcsDict mapObjects = null;
+    private transient DcsDict distObjects = null;
+    private transient DcsDict cityObjects = null;
+    private transient DcsDict bldObjects = null;
 
     @Override
     public boolean matchValue(Object value) {
@@ -67,37 +67,37 @@ public class PostalAddress implements ValueBasedClassifier {
 
     public DcsDict getCities() {
         if (cities==null)
-            cities = DcsDict.dictionary("Addr_cities");
+            cities = DcsFactory.dictionary("Addr_cities");
         return cities;
     }
 
     public DcsDict getRegions() {
         if (regions==null)
-            regions = DcsDict.dictionary("Addr_regions");
+            regions = DcsFactory.dictionary("Addr_regions");
         return regions;
     }
 
     public DcsDict getMapObjects() {
         if (mapObjects==null)
-            mapObjects = DcsDict.dictionary("Addr_mapObjects");
+            mapObjects = DcsFactory.dictionary("Addr_mapObjects");
         return mapObjects;
     }
 
     public DcsDict getDistObjects() {
         if (distObjects==null)
-            distObjects = DcsDict.dictionary("Addr_distObjects");
+            distObjects = DcsFactory.dictionary("Addr_distObjects");
         return distObjects;
     }
 
     public DcsDict getCityObjects() {
         if (cityObjects==null)
-            cityObjects = DcsDict.dictionary("Addr_cityObjects");
+            cityObjects = DcsFactory.dictionary("Addr_cityObjects");
         return cityObjects;
     }
 
     public DcsDict getBldObjects() {
         if (bldObjects==null)
-            bldObjects = DcsDict.dictionary("Addr_bldObjects");
+            bldObjects = DcsFactory.dictionary("Addr_bldObjects");
         return bldObjects;
     }
 

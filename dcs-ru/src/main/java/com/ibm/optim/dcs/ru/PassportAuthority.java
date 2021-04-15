@@ -25,9 +25,9 @@ import com.ibm.infosphere.classification.ValueBasedClassifier;
 
 public class PassportAuthority implements ValueBasedClassifier {
 
-    private DcsDict keyWords = null;
-    private DcsDict words = null;
-    private DcsDict regions = null;
+    private transient DcsDict keyWords = null;
+    private transient DcsDict words = null;
+    private transient DcsDict regions = null;
 
     @Override
     public boolean matchValue(Object value) {
@@ -57,19 +57,19 @@ public class PassportAuthority implements ValueBasedClassifier {
 
     public DcsDict getKeyWords() {
         if (keyWords==null)
-            keyWords = DcsDict.dictionary("PA_Keys");
+            keyWords = DcsFactory.dictionary("PA_Keys");
         return keyWords;
     }
 
     public DcsDict getWords() {
         if (words==null)
-            words = DcsDict.dictionary("PA_Words");
+            words = DcsFactory.dictionary("PA_Words");
         return words;
     }
 
     public DcsDict getRegions() {
         if (regions==null)
-            regions = DcsDict.dictionary("PA_Regions");
+            regions = DcsFactory.dictionary("PA_Regions");
         return regions;
     }
 
