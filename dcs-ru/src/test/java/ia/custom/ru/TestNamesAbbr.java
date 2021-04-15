@@ -21,8 +21,6 @@
  */
 package ia.custom.ru;
 
-import ia.custom.ru.NamesAbbr;
-import ia.custom.ru.DcsFactory;
 import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;

@@ -21,8 +21,6 @@
  */
 package ia.custom.ru;
 
-import ia.custom.ru.TaxPayerId;
-import ia.custom.ru.OGRN;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -41,7 +39,7 @@ public class TestOGRN {
         boolean res2 = new OGRN().matchValue(in2);
         Assert.assertEquals(false, res2);
         String in3 = "319631300041241";
-        boolean res3 = new TaxPayerId().matchValue(in3);
+        boolean res3 = new OGRN().matchValue(in3);
         Assert.assertEquals(false, res3);
     }
 

@@ -21,8 +21,6 @@
  */
 package ia.custom.ru;
 
-import ia.custom.ru.TaxPayerId;
-import ia.custom.ru.DcsUtil;
 import java.math.BigDecimal;
 import org.junit.Assert;
 import org.junit.Test;

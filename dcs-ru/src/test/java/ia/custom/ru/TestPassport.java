@@ -21,8 +21,6 @@
  */
 package ia.custom.ru;
 
-import ia.custom.ru.PassportForeign;
-import ia.custom.ru.PassportDomestic;
 import org.junit.Assert;
 import org.junit.Test;
 
