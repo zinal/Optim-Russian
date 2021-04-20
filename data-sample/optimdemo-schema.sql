@@ -1,5 +1,7 @@
 CREATE SCHEMA optim1;
 
+CREATE SEQUENCE optim1.customer_seq;
+
 CREATE TABLE optim1.customer (
   custid INTEGER NOT NULL,
   custmode CHAR(1) NOT NULL,
