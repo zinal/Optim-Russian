@@ -46,6 +46,18 @@ public class NamesSource {
         this.dataFemale = ns.sort(dataFemale);
     }
 
+    public NamesData getDataMale() {
+        return dataMale;
+    }
+
+    public NamesData getDataFemale() {
+        return dataFemale;
+    }
+
+    public HashSet<String> getKnownNames() {
+        return knownNames;
+    }
+
     public boolean isAntiDupProtection() {
         return antiDupProtection;
     }

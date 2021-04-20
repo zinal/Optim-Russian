@@ -25,8 +25,8 @@ import com.ibm.optim.ru.supp.DbUtils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  *
@@ -78,17 +78,26 @@ public class FioDbWriter extends DbUtils implements AutoCloseable {
     private PreparedStatement psAddFemale;
     private PreparedStatement psAddAny;
 
-    private String sortSalt;
-
-    private final NamesData dataMale = new NamesData();
-    private final NamesData dataFemale = new NamesData();
-
     private int countAll = 0;
     private int countMale = 0;
     private int countFemale = 0;
 
+    private final Properties config;
     private NamesSource controller = null;
     private long lastUpdated = 0L;
+
+    public FioDbWriter(Properties config) {
+        this.config = config;
+    }
+
+    public NamesSource makeController() throws Exception {
+        if (controller==null) {
+            controller = new NamesSourceBuilder().loadNames(config);
+            controller.start();
+            LOG.info("Started controller {}", controller.toString());
+        }
+        return controller;
+    }
 
     @Override
     public void close() {
@@ -151,53 +160,14 @@ public class FioDbWriter extends DbUtils implements AutoCloseable {
         this.connection = con;
     }
 
-    public void setSortSalt(String sortSalt) {
-        this.sortSalt = sortSalt;
-    }
-
-    public void loadNames(String fNamesMale, String fNamesFemale,
-            String fLastMale, String fLastFemale) throws Exception {
-        if (fNamesMale==null || fNamesFemale==null ||
-                fLastMale==null || fLastFemale==null) {
-            throw new IllegalArgumentException("Missing input filenames, "
-                    + "check job configuration");
-        }
-        List<NamesMaleBean> firstMale = NamesMaleBean.readExtended(fNamesMale);
-        List<NamesBean> firstFemale = NamesMaleBean.readSimple(fNamesFemale);
-        List<NamesBean> lastMale = NamesBean.readSimple(fLastMale);
-        List<NamesBean> lastFemale = NamesBean.readSimple(fLastFemale);
-
-        dataMale.last = lastMale;
-        dataMale.first = new ArrayList<>();
-        dataMale.middle = new ArrayList<>();
-        dataFemale.last = lastFemale;
-        dataFemale.first = firstFemale;
-        dataFemale.middle = new ArrayList<>();
-
-        for (NamesMaleBean nm : firstMale) {
-            dataMale.first.add(new NamesBean(nm.getName()));
-            dataMale.middle.add(new NamesBean(nm.getMidMale()));
-            dataFemale.middle.add(new NamesBean(nm.getMidFemale()));
-        }
-
-        LOG.info("Input dictionaries: {}/{}/{} male, {}/{}/{} female.",
-                dataMale.first.size(), dataMale.last.size(), dataMale.middle.size(),
-                dataFemale.first.size(), dataFemale.last.size(), dataFemale.middle.size());
-    }
-
     public void generate(int count) throws Exception {
         saveNames();
         LOG.info("Name dictionaries saved to database.");
-        if (controller==null) {
-            controller = new NamesSource(sortSalt, dataMale, dataFemale);
-            controller.start();
-            LOG.info("Started controller {}", controller.toString());
-        }
         lastUpdated = System.currentTimeMillis();
         int steps = 0;
         for (int i=0; i<count; ++i) {
-            writeRow(true, controller.nextMale());
-            writeRow(false, controller.nextFemale());
+            writeRow(true, makeController().nextMale());
+            writeRow(false, makeController().nextFemale());
             if (checkCommit(++steps))
                 steps = 0;
         } // for (...)
@@ -222,7 +192,7 @@ public class FioDbWriter extends DbUtils implements AutoCloseable {
         connection.commit();
         long tv = System.currentTimeMillis();
         if (steps<0 || tv - lastUpdated >= 5000L) {
-            int dupCount = controller.getDuplicateCount();
+            int dupCount = makeController().getDuplicateCount();
             if (dupCount > 0) {
                 LOG.info("Generated {} names, {} duplicates",
                         countAll, dupCount);
@@ -307,9 +277,13 @@ public class FioDbWriter extends DbUtils implements AutoCloseable {
     }
 
     private void saveNames() throws Exception {
-        savePair("dict_name_first", dataMale.first, dataFemale.first);
-        savePair("dict_name_last", dataMale.last, dataFemale.last);
-        savePair("dict_name_middle", dataMale.middle, dataFemale.middle);
+        if (controller != null) {
+            NamesData dataMale = makeController().getDataMale();
+            NamesData dataFemale = makeController().getDataFemale();
+            savePair("dict_name_first", dataMale.first, dataFemale.first);
+            savePair("dict_name_last", dataMale.last, dataFemale.last);
+            savePair("dict_name_middle", dataMale.middle, dataFemale.middle);
+        }
     }
 
 }
