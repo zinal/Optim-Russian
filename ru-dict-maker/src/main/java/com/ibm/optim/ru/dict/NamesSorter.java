@@ -58,6 +58,19 @@ public class NamesSorter {
     }
 
     /**
+     * Partial sort over the NamesData (leaving last names intact).
+     * @param nd Input lists
+     * @return Output - sorted lists
+     */
+    public NamesData sortPart(NamesData nd) {
+        final NamesData ret = new NamesData();
+        ret.first = sort(nd.first);
+        ret.last = nd.last;
+        ret.middle = sort(nd.middle);
+        return ret;
+    }
+
+    /**
      * Sort the list of values according to salted hash values.
      * @param src Input list with no duplicate values
      * @return New copy, sorted appropriately.

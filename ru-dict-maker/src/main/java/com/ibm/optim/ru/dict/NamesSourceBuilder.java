@@ -31,20 +31,21 @@ import java.util.Properties;
  */
 public class NamesSourceBuilder extends PropNames {
 
-    private static final org.slf4j.Logger LOG
-            = org.slf4j.LoggerFactory.getLogger(NamesSourceBuilder.class);
-
     public NamesSource loadNames(Properties props) throws Exception {
         String fNamesMale    = props.getProperty(PROP_NAMES_M);
         String fNamesFemale  = props.getProperty(PROP_NAMES_F);
         String fLastMale     = props.getProperty(PROP_FAM_M);
         String fLastFemale   = props.getProperty(PROP_FAM_F);
         String salt          = props.getProperty(PROP_SALT);
+        
         if (fNamesMale==null || fNamesFemale==null ||
-                fLastMale==null || fLastFemale==null || salt==null) {
+                fLastMale==null || fLastFemale==null) {
             throw new IllegalArgumentException("Missing input filenames, "
                     + "check job configuration");
         }
+        if (salt==null)
+            salt = " ";
+        
         List<NamesMaleBean> firstMale = NamesMaleBean.readExtended(fNamesMale);
         List<NamesBean> firstFemale = NamesMaleBean.readSimple(fNamesFemale);
         List<NamesBean> lastMale = NamesBean.readSimple(fLastMale);
@@ -64,10 +65,6 @@ public class NamesSourceBuilder extends PropNames {
             dataMale.middle.add(new NamesBean(nm.getMidMale()));
             dataFemale.middle.add(new NamesBean(nm.getMidFemale()));
         }
-
-        LOG.info("Input dictionaries: {}/{}/{} male, {}/{}/{} female.",
-                dataMale.first.size(), dataMale.last.size(), dataMale.middle.size(),
-                dataFemale.first.size(), dataFemale.last.size(), dataFemale.middle.size());
 
         return new NamesSource(salt, dataMale, dataFemale);
     }

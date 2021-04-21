@@ -21,32 +21,37 @@
  */
 package com.ibm.optim.ru.gen;
 
+import com.ibm.optim.ru.supp.StrUtils;
 import org.apache.commons.text.RandomStringGenerator;
 
 /**
  *
  * @author zinal
  */
-public class OgrnGen extends AbstractGenerator {
+public class PassportGen extends AbstractGenerator {
 
     public static enum Type {
-        Physical,
-        Government,
-        Commercial
+        Domestic,
+        Foreign
     };
     
     private final Type type;
-    
+
+    private final RandomStringGenerator gen0 
+            = new RandomStringGenerator.Builder()
+                    .withinRange('1', '9')
+                    .build();
+
     private final RandomStringGenerator gen1 
             = new RandomStringGenerator.Builder()
                     .withinRange('0', '9')
                     .build();
 
-    public OgrnGen() {
-        this(true, Type.Physical);
+    public PassportGen() {
+        this(true, Type.Domestic);
     }
     
-    public OgrnGen(boolean uniq, Type type) {
+    public PassportGen(boolean uniq, Type type) {
         super(uniq);
         this.type = type;
     }
@@ -54,35 +59,22 @@ public class OgrnGen extends AbstractGenerator {
     @Override
     protected String nextRandom() {
         switch (type) {
-            case Physical:
-                return randomPhysical();
-            case Government:
-                return randomGovernment();
-            case Commercial:
-                return randomCommercial();
+            case Domestic:
+                return randomDomestic();
+            case Foreign:
+                return randomForeign();
         }
         throw new IllegalStateException();
     }
 
-    public String randomPhysical() {
-        String main = "3" + gen1.generate(13);
-        long longValue = Long.parseLong(main);
-        int control = (int) (longValue % 13) % 10;
-        return main + NUMS[control];
+    public String randomDomestic() {
+        return gen0.generate(1) + gen1.generate(3) + " "
+                + gen1.generate(6);
     }
 
-    public String randomGovernment() {
-        String main = "2" + gen1.generate(11);
-        long longValue = Long.parseLong(main);
-        int control = (int) (longValue % 11) % 10;
-        return main + NUMS[control];
-    }
-
-    public String randomCommercial() {
-        String main = "1" + gen1.generate(11);
-        long longValue = Long.parseLong(main);
-        int control = (int) (longValue % 11) % 10;
-        return main + NUMS[control];
+    public String randomForeign() {
+        return gen0.generate(1) + gen1.generate(1) + " "
+                + gen1.generate(7);
     }
 
 }

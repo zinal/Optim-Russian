@@ -29,21 +29,29 @@ import java.util.HashSet;
  */
 public class NamesSource {
 
-    private final NamesData dataMale;
-    private final NamesData dataFemale;
+    private final String salt;
+    private int saltCounter;
+
+    private NamesData dataMale;
+    private NamesData dataFemale;
 
     private final Positions posMale = new Positions();
     private final Positions posFemale = new Positions();
 
     private boolean antiDupProtection = false;
+    private boolean reorder = false;
     private final HashSet<String> knownNames = new HashSet<>();
     private int duplicateCount = 0;
 
     public NamesSource(String salt, NamesData dataMale,
             NamesData dataFemale) throws Exception {
+        if (salt==null || salt.length()==0)
+            salt = " ";
         final NamesSorter ns = new NamesSorter(salt);
         this.dataMale = ns.sort(dataMale);
         this.dataFemale = ns.sort(dataFemale);
+        this.salt = salt;
+        this.saltCounter = 0;
     }
 
     public NamesData getDataMale() {
@@ -60,6 +68,14 @@ public class NamesSource {
 
     public void setAntiDupProtection(boolean antiDupProtection) {
         this.antiDupProtection = antiDupProtection;
+    }
+
+    public boolean isReorder() {
+        return reorder;
+    }
+
+    public void setReorder(boolean reorder) {
+        this.reorder = reorder;
     }
 
     public int getDuplicateCount() {
@@ -80,11 +96,21 @@ public class NamesSource {
     }
 
     public NameValues nextMale() throws Exception {
-        return next(dataMale, posMale);
+        NameValues nv = next(dataMale, posMale);
+        if (reorder) {
+            String s = salt + "." + Integer.toHexString(saltCounter++);
+            dataMale = new NamesSorter(s).sortPart(dataMale);
+        }
+        return nv;
     }
 
     public NameValues nextFemale() throws Exception {
-        return next(dataFemale, posFemale);
+        NameValues nv = next(dataFemale, posFemale);
+        if (reorder) {
+            String s = salt + "." + Integer.toHexString(saltCounter++);
+            dataFemale = new NamesSorter(s).sortPart(dataFemale);
+        }
+        return nv;
     }
 
     private NameValues next(NamesData data, Positions pos) throws Exception {
