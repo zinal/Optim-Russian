@@ -29,6 +29,8 @@ import java.util.HashSet;
  */
 public abstract class AbstractGenerator implements ValueGenerator {
     
+    public static final String[] NUMS = {"0","1","2","3","4","5","6","7","8","9"};
+
     private final HashSet<String> values;
     
     public AbstractGenerator(boolean uniq) {
@@ -50,6 +52,19 @@ public abstract class AbstractGenerator implements ValueGenerator {
         if (values!=null)
             return values.add(value);
         return true;
+    }
+
+    protected abstract String nextRandom();
+
+    @Override
+    public String nextValue() {
+        String v = null;
+        while (v==null) {
+            v = nextRandom();
+            if (! addExisting(v))
+                v = null;
+        }
+        return v;
     }
     
 }

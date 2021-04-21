@@ -21,6 +21,7 @@
  */
 package com.ibm.optim.ru.gen;
 
+import com.ibm.optim.ru.supp.StrUtils;
 import org.apache.commons.text.RandomStringGenerator;
 
 /**
@@ -50,37 +51,30 @@ public class InnGen extends AbstractGenerator {
     }
     
     @Override
-    public String nextValue() {
-        String v = null;
-        while (v==null) {
-            switch (type) {
-                case Physical:
-                    v = randomPhysical();
-                    break;
-                case Legal:
-                    v = randomLegal();
-                    break;
-            }
-            if (! addExisting(v))
-                v = null;
+    protected String nextRandom() {
+        switch (type) {
+            case Physical:
+                return randomPhysical();
+            case Legal:
+                return randomLegal();
         }
-        return v;
+        throw new IllegalStateException();
     }
     
     public String randomPhysical() {
         // TODO: оптимизация на скорость
         String main = gen.generate(10);
-        int[] inn = stringToDigits(main);
+        int[] inn = StrUtils.stringToDigits(main);
         int n11 = getChecksum(inn, N11);
         main = main + NUMS[n11];
-        inn = stringToDigits(main);
+        inn = StrUtils.stringToDigits(main);
         int n12 = getChecksum(inn, N12);
         return main + NUMS[n12];
     }
 
     public String randomLegal() {
         String main = gen.generate(9);
-        int[] inn = stringToDigits(main);
+        int[] inn = StrUtils.stringToDigits(main);
         int n10 = getChecksum(inn, N10);
         return main + NUMS[n10];
     }
@@ -89,15 +83,6 @@ public class InnGen extends AbstractGenerator {
     public static final int[] N10 = {2, 4,10, 3, 5, 9, 4, 6, 8};
     public static final int[] N11 = {7, 2, 4,10, 3, 5, 9, 4, 6, 8};
     public static final int[] N12 = {3, 7, 2, 4,10, 3, 5, 9, 4, 6, 8};
-    public static final String[] NUMS = {"0","1","2","3","4","5","6","7","8","9"};
-
-    public static int[] stringToDigits(String value) {
-        int[] digits = new int[value.length()];
-        for (int i=0; i<value.length(); ++i) {
-            digits[i] = Character.getNumericValue(value.charAt(i));
-        }
-        return digits;
-    }
 
     public static int getChecksum(int[] digits, int[] multipliers) {
         int checksum = 0;
