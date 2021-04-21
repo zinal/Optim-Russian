@@ -36,6 +36,7 @@ public class InnGen extends AbstractGenerator {
     };
     
     private final Type type;
+    
     private final RandomStringGenerator gen 
             = new RandomStringGenerator.Builder()
                     .withinRange('0', '9')

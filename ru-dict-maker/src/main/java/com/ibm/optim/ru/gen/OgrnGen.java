@@ -28,50 +28,62 @@ import org.apache.commons.text.RandomStringGenerator;
  *
  * @author zinal
  */
-public class SnilsGen extends AbstractGenerator {
+public class OgrnGen extends AbstractGenerator {
 
-    private final RandomStringGenerator gen0 
-            = new RandomStringGenerator.Builder()
-                    .withinRange('1', '9')
-                    .build();
-
+    public static enum Type {
+        Physical,
+        Government,
+        Commercial
+    };
+    
+    private final Type type;
+    
     private final RandomStringGenerator gen1 
             = new RandomStringGenerator.Builder()
                     .withinRange('0', '9')
                     .build();
 
-    public SnilsGen() {
-        super(true);
+    public OgrnGen() {
+        this(true, Type.Physical);
     }
     
-    public SnilsGen(boolean uniq) {
+    public OgrnGen(boolean uniq, Type type) {
         super(uniq);
+        this.type = type;
     }
 
     @Override
     protected String nextRandom() {
-        String main = gen0.generate(1) + gen1.generate(8);
-        int[] vals = StrUtils.stringToDigits(main);
-        int control = getControl(vals);
-        return main.substring(0, 3) + "-" 
-                + main.substring(3, 6) + "-"
-                + main.substring(6, 9) + " "
-                + NUMS[control/10] + NUMS[control%10];
+        switch (type) {
+            case Physical:
+                return randomPhysical();
+            case Government:
+                return randomGovernment();
+            case Commercial:
+                return randomCommercial();
+        }
+        throw new IllegalStateException();
     }
 
-    public static final int[] SNILS = { 9,8,7,6,5,4,3,2,1 };
+    public String randomPhysical() {
+        String main = "3" + gen1.generate(13);
+        long longValue = Long.parseLong(main);
+        int control = (int) (longValue % 13) % 10;
+        return main + NUMS[control];
+    }
 
-    public int getControl(int[] digits) {
-        int control = 0;
-        for (int i=0; i<SNILS.length; ++i) {
-            control += digits[i] * SNILS[i];
-        }
-        if (control > 101) {
-            control = control % 101;
-        }
-        if (control == 100 || control == 101)
-            control = 0;
-        return control;
+    public String randomGovernment() {
+        String main = "2" + gen1.generate(11);
+        long longValue = Long.parseLong(main);
+        int control = (int) (longValue % 11) % 10;
+        return main + NUMS[control];
+    }
+
+    public String randomCommercial() {
+        String main = "1" + gen1.generate(11);
+        long longValue = Long.parseLong(main);
+        int control = (int) (longValue % 11) % 10;
+        return main + NUMS[control];
     }
 
 }
