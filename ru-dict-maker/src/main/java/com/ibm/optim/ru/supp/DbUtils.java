@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 
 /**
@@ -34,7 +35,17 @@ import java.sql.Statement;
 public class DbUtils {
 
     public static void close(PreparedStatement ps) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (ps!=null)
+            try {
+                ps.close();
+            } catch(Exception ex) {}
+    }
+
+    public static void close(ResultSet rs) {
+        if (rs!=null)
+            try {
+                rs.close();
+            } catch(Exception ex) {}
     }
 
     public static String resolvePath(String path) {
