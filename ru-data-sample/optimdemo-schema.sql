@@ -1,5 +1,7 @@
 CREATE SCHEMA optim1;
 
+DROP TABLE optim1.physical_entity;
+
 CREATE SEQUENCE optim1.customer_seq;
 
 CREATE TABLE optim1.customer (
@@ -24,8 +26,10 @@ CREATE TABLE optim1.physical_entity (
   pe_name_first VARCHAR(100) NOT NULL,
   pe_name_middle VARCHAR(100) NULL,
   pe_name_last VARCHAR(100) NULL,
+  pe_sex CHAR(1) NOT NULL,
   pe_num_pay VARCHAR(50) NULL,
   pe_num_soc VARCHAR(50) NULL,
   CONSTRAINT pe_pk PRIMARY KEY(custid),
-  CONSTRAINT pe_fk1 FOREIGN KEY(custid) REFERENCES optim1.customer
+  CONSTRAINT pe_fk1 FOREIGN KEY(custid) REFERENCES optim1.customer,
+  CONSTRAINT pe_ck1 CHECK(pe_sex IN ('M','F'))
 );

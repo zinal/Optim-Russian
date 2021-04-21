@@ -6,12 +6,16 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Properties;
+import com.ibm.optim.ru.dict.*;
 
 /**
  *
  * @author zinal
  */
 public class DataGen implements AutoCloseable {
+
+    private static final org.slf4j.Logger LOG
+           = org.slf4j.LoggerFactory.getLogger(DataGen.class);
 
     public static void main(String[] args) {
         try {
@@ -21,7 +25,7 @@ public class DataGen implements AutoCloseable {
             }
             new DataGen(props) . run();
         } catch(Exception ex) {
-            ex.printStackTrace(System.out);
+            LOG.error("FATAL", ex);
             System.exit(1);
         }
     }
@@ -30,11 +34,16 @@ public class DataGen implements AutoCloseable {
     public static final String PROP_USER = "DbUser";
     public static final String PROP_PASS = "DbPassword";
 
+    private final Properties props;
+
     private Connection con;
+
+    private NamesSource names = null;
 
     private PreparedStatement psCustomer = null;
 
     private DataGen(Properties props) throws Exception {
+        this.props = props;
         this.con = DriverManager.getConnection(
                 props.getProperty(PROP_URL),
                 props.getProperty(PROP_USER),
@@ -42,8 +51,26 @@ public class DataGen implements AutoCloseable {
     }
 
     private void run() throws Exception {
+       LOG.info("Connected, initializing...");
        con.setAutoCommit(false);
+       { // Значение соли делаем каждый раз новое
+           String salt = props.getProperty(PropNames.PROP_SALT, "");
+           if (salt==null || salt.length()==0)
+               salt = "-";
+           salt = salt + " " + Long.toHexString(System.currentTimeMillis());
+           props.setProperty(PropNames.PROP_SALT, salt);
+       }
+       loadKnownNames();
+       LOG.info("Initialized, ready to generate data...");
+
        con.commit();
+    }
+
+    private NamesSource getNames() throws Exception {
+        if (names==null) {
+            names = new NamesSourceBuilder().loadNames(props);
+        }
+        return names;
     }
 
     private int makeCustomer(boolean physical) throws Exception {
@@ -83,6 +110,16 @@ public class DataGen implements AutoCloseable {
                 con.close();
             } catch(Exception ex) {}
             con = null;
+        }
+    }
+
+    private void loadKnownNames() throws Exception {
+        try (PreparedStatement ps = con.prepareStatement("SELECT pe_name_full "
+                + "FROM optim1.physical_entity")) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next())
+                    getNames().addKnown(rs.getString(1));
+            }
         }
     }
 

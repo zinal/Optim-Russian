@@ -54,10 +54,6 @@ public class NamesSource {
         return dataFemale;
     }
 
-    public HashSet<String> getKnownNames() {
-        return knownNames;
-    }
-
     public boolean isAntiDupProtection() {
         return antiDupProtection;
     }
@@ -68,6 +64,19 @@ public class NamesSource {
 
     public int getDuplicateCount() {
         return duplicateCount;
+    }
+
+    public boolean addKnown(String value) {
+        if (value==null)
+            value = "";
+        else
+            value = value.trim();
+        if (value.length()==0)
+            return false;
+        if (antiDupProtection) {
+            return knownNames.add(value.toLowerCase());
+        }
+        return true;
     }
 
     public NameValues nextMale() throws Exception {
@@ -100,11 +109,9 @@ public class NamesSource {
                     }
                 }
             }
-            if (antiDupProtection) {
-                if (! knownNames.add(val.full.toLowerCase()) ) {
-                    val = null;
-                    ++duplicateCount;
-                }
+            if (! addKnown(val.full) ) {
+                val = null;
+                ++duplicateCount;
             }
         }
         return val;
