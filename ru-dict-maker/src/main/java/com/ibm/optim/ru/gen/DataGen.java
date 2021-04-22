@@ -1,4 +1,4 @@
-package sample;
+package com.ibm.optim.ru.gen;
 
 import java.io.FileReader;
 import java.sql.Connection;
