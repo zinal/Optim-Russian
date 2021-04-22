@@ -106,9 +106,11 @@ public class DataGen implements AutoCloseable {
 
     private NamesSource makeNames() throws Exception {
         if (genNames==null) {
+            LOG.info("Loading names dictionary...");
             genNames = new NamesSourceBuilder().loadNames(props);
             genNames.setAntiDupProtection(true);
             genNames.setReorder(true);
+            LOG.info("Names dictionary ready!");
         }
         return genNames;
     }
@@ -119,8 +121,9 @@ public class DataGen implements AutoCloseable {
                     + " VALUES(nextval('optim1.customer_seq'),?) RETURNING custid");
         }
         psCustomer.setString(1, physical ? "P" : "L");
-        psCustomer.executeUpdate();
+        psCustomer.execute();
         try (ResultSet rs = psCustomer.getResultSet()) {
+            rs.next();
             return rs.getInt(1);
         }
     }
@@ -135,9 +138,9 @@ public class DataGen implements AutoCloseable {
         if ( coin.nextBoolean() ) {
             // ИП
             if (coin.nextBoolean()) {
-                name = genNames.nextFemale().full;
+                name = makeNames().nextFemale().full;
             } else {
-                name = genNames.nextMale().full;
+                name = makeNames().nextMale().full;
             }
             regno = genOgrnPhy.nextValue();
             payno = genInnPhy.nextValue();
@@ -231,8 +234,9 @@ public class DataGen implements AutoCloseable {
                 psContact.setString(2, "P");
                 break;
         }
-        psContact.executeUpdate();
+        psContact.execute();
         try (ResultSet rs = psContact.getResultSet()) {
+            rs.next();
             return rs.getInt(1);
         }
     }
