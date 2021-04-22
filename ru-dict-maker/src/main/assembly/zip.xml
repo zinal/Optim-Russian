@@ -38,6 +38,8 @@
         <outputDirectory>.</outputDirectory>
         <includes>
             <include>*.templ</include>
+            <include>*.sql</include>
+            <include>*.txt</include>
         </includes>
     </fileSet>
   </fileSets>

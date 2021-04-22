@@ -31,7 +31,6 @@ CREATE TABLE optim1.physical_entity (
   pe_num_soc VARCHAR(50) NULL,
   pe_birthday DATE NULL,
   pe_passp_num VARCHAR(50) NULL,
-  pe_passp_date DATE NULL,
   pe_passp_iss_date DATE NULL,
   pe_forg_num VARCHAR(50) NULL,
   pe_forg_iss_date DATE NULL,
