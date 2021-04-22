@@ -122,8 +122,8 @@ public class FioDbWriter extends DbUtils implements AutoCloseable {
 
     /**
      * Create a new database, throwing the exception if one exists.
-     * @param pathname
-     * @throws Exception
+     * @param pathname Path to the database
+     * @throws Exception In case of an error
      */
     public void create(String pathname) throws Exception {
         deleteFiles(pathname);
