@@ -10,7 +10,6 @@ import java.util.Random;
 import java.time.LocalDate;
 import org.apache.commons.text.RandomStringGenerator;
 import com.ibm.optim.ru.dict.*;
-import com.ibm.optim.ru.gen.*;
 import com.ibm.optim.ru.supp.DbUtils;
 
 /**
@@ -48,16 +47,18 @@ public class DataGen implements AutoCloseable {
            = new RandomStringGenerator.Builder()
                    .withinRange(new char[]{' ', ' '}, new char[]{'а', 'я'}, new char[]{'А', 'Я'})
             .build();
-    
-    private NamesSource names = null;
-    private final ValueGenerator innPhy = new InnGen(true, InnGen.Type.Physical);
-    private final ValueGenerator innLeg = new InnGen(true, InnGen.Type.Legal);
-    private final ValueGenerator ogrnPhy = new OgrnGen(true, OgrnGen.Type.Physical);
-    private final ValueGenerator ogrnCom = new OgrnGen(true, OgrnGen.Type.Commercial);
-    private final ValueGenerator ogrnGov = new OgrnGen(true, OgrnGen.Type.Government);
-    private final ValueGenerator passDom = new PassportGen(true, PassportGen.Type.Domestic);
-    private final ValueGenerator passFor = new PassportGen(true, PassportGen.Type.Foreign);
-    private final ValueGenerator snils = new SnilsGen(true);
+
+    private NamesSource genNames = null;
+    private final ValueGenerator genInnPhy = new InnGen(true, InnGen.Type.Physical);
+    private final ValueGenerator genInnLeg = new InnGen(true, InnGen.Type.Legal);
+    private final ValueGenerator genOgrnPhy = new OgrnGen(true, OgrnGen.Type.Physical);
+    private final ValueGenerator genOgrnCom = new OgrnGen(true, OgrnGen.Type.Commercial);
+    private final ValueGenerator genOgrnGov = new OgrnGen(true, OgrnGen.Type.Government);
+    private final ValueGenerator genPassDom = new PassportGen(true, PassportGen.Type.Domestic);
+    private final ValueGenerator genPassFor = new PassportGen(true, PassportGen.Type.Foreign);
+    private final ValueGenerator genSnils = new SnilsGen(true);
+    private final ValueGenerator genPhone = new PhoneGen();
+    private final ValueGenerator genEmail = new EmailGen();
 
     private PreparedStatement psCustomer = null;
     private PreparedStatement psLegal = null;
@@ -87,15 +88,15 @@ public class DataGen implements AutoCloseable {
        loadPhysical();
        loadLegal();
        LOG.info("Initialized, ready to generate data...");
-       
+
        for (int i=0; i<100; i++) {
-           int id = makeLegal();
+           int id = addLegalEntity();
            addPhones(id);
            addEmails(id);
        }
 
        for (int i=0; i<200; i++) {
-           int id = makePhysical();
+           int id = addPhysicalEntity();
            addPhones(id);
            addEmails(id);
        }
@@ -103,16 +104,16 @@ public class DataGen implements AutoCloseable {
        con.commit();
     }
 
-    private NamesSource getNames() throws Exception {
-        if (names==null) {
-            names = new NamesSourceBuilder().loadNames(props);
-            names.setAntiDupProtection(true);
-            names.setReorder(true);
+    private NamesSource makeNames() throws Exception {
+        if (genNames==null) {
+            genNames = new NamesSourceBuilder().loadNames(props);
+            genNames.setAntiDupProtection(true);
+            genNames.setReorder(true);
         }
-        return names;
+        return genNames;
     }
 
-    private int makeCustomer(boolean physical) throws Exception {
+    private int addCustomer(boolean physical) throws Exception {
         if (psCustomer==null) {
             psCustomer = con.prepareStatement("INSERT INTO optim1.customer(custid, custmode)"
                     + " VALUES(nextval('optim1.customer_seq'),?) RETURNING custid");
@@ -124,32 +125,32 @@ public class DataGen implements AutoCloseable {
         }
     }
 
-    private int makeLegal() throws Exception {
-        int id = makeCustomer(false);
-        
-        String name = "-";
-        String regno = "-";
-        String payno = "-";
+    private int addLegalEntity() throws Exception {
+        int id = addCustomer(false);
+
+        String name;
+        String regno;
+        String payno;
 
         if ( coin.nextBoolean() ) {
             // ИП
             if (coin.nextBoolean()) {
-                name = names.nextFemale().full;
+                name = genNames.nextFemale().full;
             } else {
-                name = names.nextMale().full;
+                name = genNames.nextMale().full;
             }
-            regno = ogrnPhy.nextValue();
-            payno = innPhy.nextValue();
+            regno = genOgrnPhy.nextValue();
+            payno = genInnPhy.nextValue();
         } else if ( coin.nextBoolean() && coin.nextBoolean() ) {
             // Гос. организация
             name = "Министерство " + boober.generate(5, 40);
-            regno = ogrnGov.nextValue();
-            payno = innLeg.nextValue();
+            regno = genOgrnGov.nextValue();
+            payno = genInnLeg.nextValue();
         } else {
             // Коммерческая структура
             name = "ООО " + boober.generate(5, 40);
-            regno = ogrnCom.nextValue();
-            payno = innLeg.nextValue();
+            regno = genOgrnCom.nextValue();
+            payno = genInnLeg.nextValue();
         }
 
         if (psLegal==null) {
@@ -166,22 +167,29 @@ public class DataGen implements AutoCloseable {
         return id;
     }
 
-    private int makePhysical() throws Exception {
-        int id = makeCustomer(true);
-        
+    private int addPhysicalEntity() throws Exception {
+        int id = addCustomer(true);
+
         boolean sex = coin.nextBoolean();
-        NameValues name = sex ? names.nextFemale() : names.nextMale();
-        String payno = innPhy.nextValue();
-        String socno = snils.nextValue();
-        LocalDate ld = LocalDate.now();
-        ld.minusYears(20);
-        ld.minusDays(coin.nextInt(365*50));
+        NameValues name = sex ? genNames.nextFemale() : genNames.nextMale();
+        String payno = genInnPhy.nextValue();
+        String socno = genSnils.nextValue();
+        LocalDate dateBirth = LocalDate.now();
+        dateBirth = dateBirth.minusYears(20);
+        dateBirth = dateBirth.minusDays(coin.nextInt(365*50));
+        LocalDate datePasspIss = dateBirth.plusYears(18);
+        LocalDate datePasspFor = dateBirth.plusYears(20);
+        LocalDate datePasspExp = datePasspFor.plusYears(10);
+        String passpdom = genPassDom.nextValue();
+        String passpfor = genPassFor.nextValue();
 
         if (psPhysical==null) {
             psPhysical = con.prepareStatement("INSERT INTO optim1.physical_entity "
                     + "(custid, pe_name_full, pe_name_first, pe_name_middle, pe_name_last, "
-                    + "pe_sex, pe_num_pay, pe_num_soc, pe_birthday) "
-                    + "VALUES (?,?,?,?,?,?,?,?,?)");
+                    + "pe_sex, pe_num_pay, pe_num_soc, pe_birthday,"
+                    + "pe_passp_num, pe_passp_iss_date, "
+                    + "pe_forg_num, pe_forg_iss_date, pe_forg_exp_date) "
+                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         }
         psPhysical.setInt(1, id);
         psPhysical.setString(2, name.full);
@@ -191,12 +199,17 @@ public class DataGen implements AutoCloseable {
         psPhysical.setString(6, sex ? "F" : "M");
         psPhysical.setString(7, payno);
         psPhysical.setString(8, socno);
-        psPhysical.setDate(9, new java.sql.Date(ld.toEpochDay()));
+        psPhysical.setDate(9, new java.sql.Date(dateBirth.toEpochDay()));
+        psPhysical.setString(10, passpdom);
+        psPhysical.setDate(11, new java.sql.Date(datePasspIss.toEpochDay()));
+        psPhysical.setString(12, passpfor);
+        psPhysical.setDate(13, new java.sql.Date(datePasspFor.toEpochDay()));
+        psPhysical.setDate(14, new java.sql.Date(datePasspExp.toEpochDay()));
         psPhysical.executeUpdate();
 
         return id;
     }
-    
+
     public static enum ContactType {
         Phone,
         Email
@@ -223,14 +236,16 @@ public class DataGen implements AutoCloseable {
             return rs.getInt(1);
         }
     }
-    
+
     private int addPhone(int customer) throws Exception {
         if ( psPhone == null ) {
             psPhone = con.prepareStatement("INSERT INTO optim1.contact_phone "
                     + "(contid, phoneval) VALUES (?, ?)");
         }
+        String phone = genPhone.nextValue();
         int id = addContact(customer, ContactType.Phone);
         psPhone.setInt(1, id);
+        psPhone.setString(2, phone);
         psPhone.executeUpdate();
         return id;
     }
@@ -254,8 +269,10 @@ public class DataGen implements AutoCloseable {
             psEmail = con.prepareStatement("INSERT INTO optim1.contact_email "
                     + "(contid, emailval) VALUES (?, ?)");
         }
+        String email = genEmail.nextValue();
         int id = addContact(customer, ContactType.Phone);
         psEmail.setInt(1, id);
+        psEmail.setString(2, email);
         psEmail.executeUpdate();
         return id;
     }
@@ -296,31 +313,35 @@ public class DataGen implements AutoCloseable {
                 + "pe_num_pay, pe_num_soc FROM optim1.physical_entity")) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    getNames().addKnown(rs.getString(1));
-                    innPhy.addExisting(rs.getString(2));
-                    snils.addExisting(rs.getString(3));
+                    makeNames().addKnown(rs.getString(1));
+                    genInnPhy.addExisting(rs.getString(2));
+                    genSnils.addExisting(rs.getString(3));
                 }
             }
         }
     }
 
     private void loadLegal() throws Exception {
-        try (PreparedStatement ps = con.prepareStatement("SELECT le_num_reg, "
-                + "le_num_pay, le_name FROM optim1.legal_entity")) {
+        try (PreparedStatement ps = con.prepareStatement("SELECT le_num_pay, "
+                + "le_num_reg, le_name FROM optim1.legal_entity")) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    String reg = rs.getString(1);
+                    genInnLeg.addExisting(rs.getString(1));
+                    String reg = rs.getString(2);
                     if (reg!=null && reg.length()>0) {
-                        if (reg.charAt(0)=='1') {
-                            ogrnCom.addExisting(reg);
-                        } else if (reg.charAt(0)=='1') {
-                            ogrnGov.addExisting(reg);
-                        } else {
-                            ogrnPhy.addExisting(reg);
-                            getNames().addKnown(rs.getString(3));
+                        switch (reg.charAt(0)) {
+                            case '1':
+                                genOgrnCom.addExisting(reg);
+                                break;
+                            case '2':
+                                genOgrnGov.addExisting(reg);
+                                break;
+                            default:
+                                genOgrnPhy.addExisting(reg);
+                                makeNames().addKnown(rs.getString(3));
+                                break;
                         }
                     }
-                    innLeg.addExisting(rs.getString(2));
                 }
             }
         }

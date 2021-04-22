@@ -28,7 +28,7 @@ import org.apache.commons.text.RandomStringGenerator;
  *
  * @author zinal
  */
-public class PhoneGenerator extends AbstractGenerator {
+public class PhoneGen extends AbstractGenerator {
     
     private final Random coin = new Random();
 
@@ -42,7 +42,7 @@ public class PhoneGenerator extends AbstractGenerator {
                     .withinRange('0', '9')
                     .build();
 
-    public PhoneGenerator() {
+    public PhoneGen() {
         super(false);
     }
 
