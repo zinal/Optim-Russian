@@ -89,19 +89,27 @@ public class DataGen implements AutoCloseable {
        loadLegal();
        LOG.info("Initialized, ready to generate data...");
 
-       for (int i=0; i<100; i++) {
+       for (int i=0; i<10000; i++) {
            int id = addLegalEntity();
            addPhones(id);
            addEmails(id);
+           logProgress(i, 10000, "legal entities");
        }
 
-       for (int i=0; i<200; i++) {
+       LOG.info("Legal entitities ready!");
+
+       for (int i=0; i<15000; i++) {
            int id = addPhysicalEntity();
            addPhones(id);
            addEmails(id);
+           logProgress(i, 15000, "physical entities");
        }
 
+       LOG.info("Physical entitities ready!");
+
        con.commit();
+
+       LOG.info("Transaction committed!");
     }
 
     private NamesSource makeNames() throws Exception {
@@ -202,15 +210,31 @@ public class DataGen implements AutoCloseable {
         psPhysical.setString(6, sex ? "F" : "M");
         psPhysical.setString(7, payno);
         psPhysical.setString(8, socno);
-        psPhysical.setDate(9, new java.sql.Date(dateBirth.toEpochDay()));
+        psPhysical.setDate(9, java.sql.Date.valueOf(dateBirth));
         psPhysical.setString(10, passpdom);
-        psPhysical.setDate(11, new java.sql.Date(datePasspIss.toEpochDay()));
+        psPhysical.setDate(11, java.sql.Date.valueOf(datePasspIss));
         psPhysical.setString(12, passpfor);
-        psPhysical.setDate(13, new java.sql.Date(datePasspFor.toEpochDay()));
-        psPhysical.setDate(14, new java.sql.Date(datePasspExp.toEpochDay()));
+        psPhysical.setDate(13, java.sql.Date.valueOf(datePasspFor));
+        psPhysical.setDate(14, java.sql.Date.valueOf(datePasspExp));
         psPhysical.executeUpdate();
 
         return id;
+    }
+
+    private long lastLogProgress = 0L;
+
+    private void logProgress(int ncurrent, int ntotal, String xtype) {
+        if (lastLogProgress==0L) {
+            lastLogProgress = System.currentTimeMillis();
+            return;
+        }
+        if (ncurrent % 10 != 0)
+            return;
+        long tv = System.currentTimeMillis();
+        if (tv-lastLogProgress >= 5000L) {
+            lastLogProgress = tv;
+            LOG.info("** Progress: {} of {} at {}", ncurrent, ntotal, xtype);
+        }
     }
 
     public static enum ContactType {
