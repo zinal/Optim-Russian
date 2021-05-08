@@ -173,15 +173,20 @@ public class DataGen implements AutoCloseable {
         NameValues name = sex ? names.nextFemale() : names.nextMale();
         String payno = innPhy.nextValue();
         String socno = snils.nextValue();
-        LocalDate ld = LocalDate.now();
-        ld.minusYears(20);
-        ld.minusDays(coin.nextInt(365*50));
+        LocalDate dateBirth = LocalDate.now();
+        dateBirth = dateBirth.minusYears(20);
+        dateBirth = dateBirth.minusDays(coin.nextInt(365*50));
+        LocalDate datePasspIss = dateBirth.plusYears(18);
+        LocalDate datePasspFor = dateBirth.plusYears(20);
+        LocalDate datePasspExp = datePasspFor.plusYears(10);
 
         if (psPhysical==null) {
             psPhysical = con.prepareStatement("INSERT INTO optim1.physical_entity "
                     + "(custid, pe_name_full, pe_name_first, pe_name_middle, pe_name_last, "
-                    + "pe_sex, pe_num_pay, pe_num_soc, pe_birthday) "
-                    + "VALUES (?,?,?,?,?,?,?,?,?)");
+                    + "pe_sex, pe_num_pay, pe_num_soc, pe_birthday,"
+                    + "pe_passp_num, pe_passp_iss_date, "
+                    + "pe_forg_num, pe_forg_iss_date, pe_forg_exp_date) "
+                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         }
         psPhysical.setInt(1, id);
         psPhysical.setString(2, name.full);
@@ -191,7 +196,7 @@ public class DataGen implements AutoCloseable {
         psPhysical.setString(6, sex ? "F" : "M");
         psPhysical.setString(7, payno);
         psPhysical.setString(8, socno);
-        psPhysical.setDate(9, new java.sql.Date(ld.toEpochDay()));
+        psPhysical.setDate(9, new java.sql.Date(dateBirth.toEpochDay()));
         psPhysical.executeUpdate();
 
         return id;
