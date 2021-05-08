@@ -31,11 +31,16 @@ CREATE TABLE optim1.physical_entity (
   pe_num_soc VARCHAR(50) NULL,
   pe_birthday DATE NULL,
   pe_passp_num VARCHAR(50) NULL,
-  pe_passp_date DATE NULL,
+  pe_passp_iss_date DATE NULL,
+  pe_forg_num VARCHAR(50) NULL,
+  pe_forg_iss_date DATE NULL,
+  pe_forg_exp_date DATE NULL,
   CONSTRAINT pe_pk PRIMARY KEY(custid),
   CONSTRAINT pe_fk1 FOREIGN KEY(custid) REFERENCES optim1.customer,
   CONSTRAINT pe_ck1 CHECK(pe_sex IN ('M','F'))
 );
+
+CREATE SEQUENCE optim1.contact_seq;
 
 CREATE TABLE optim1.contact (
   contid INTEGER NOT NULL,
