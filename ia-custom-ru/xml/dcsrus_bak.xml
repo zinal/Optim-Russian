@@ -1,98 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tns:DataClasses xmlns:tns="http://www.ibm.com/infosphere/ia/classification/DataclassesDefinition"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<tns:DataClasses xmlns:tns="http://www.ibm.com/infosphere/ia/classification/DataclassesDefinition" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 xsi:schemaLocation="http://www.ibm.com/infosphere/ia/classification/DataclassesDefinition/ ../../../model/DataClassesDefinition.xsd ">
-   <tns:DataClass id="OGRN_Rus" name="Russian ORGN"
-                  description="Russian organizational ID for legal and physical entities">
+   <tns:DataClass id="OGRN_Rus" name="ОГРН" 
+                  description="ОГРН для юридических лиц и индивидуальных предпринимателей">
       <tns:JavaClassifier className="ia.custom.ru.OGRN" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
          <tns:LogicalDataType>numeric</tns:LogicalDataType>
       </tns:DataTypeFilter>
    </tns:DataClass>
-   <tns:DataClass id="INN_Rus" name="Russian INN"
-                  description="Russian taxpayer ID">
+   <tns:DataClass id="INN_Rus" name="ИНН" 
+                  description="Идентификационный номер налогоплательщика">
       <tns:JavaClassifier className="ia.custom.ru.TaxPayerId" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
          <tns:LogicalDataType>numeric</tns:LogicalDataType>
       </tns:DataTypeFilter>
    </tns:DataClass>
-   <tns:DataClass id="SNILS_Rus" name="Russian SNILS"
-                  description="Russian personal social security number">
+   <tns:DataClass id="SNILS_Rus" name="СНИЛС" 
+                  description="Страховой номер индивидуального лицевого счёта">
       <tns:JavaClassifier className="ia.custom.ru.SNILS" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
          <tns:LogicalDataType>numeric</tns:LogicalDataType>
       </tns:DataTypeFilter>
    </tns:DataClass>
-   <tns:DataClass id="NID_Org_Rus" name="Russian ID authority"
-                  description="Russian organizational authority name for personal IDs">
+   <tns:DataClass id="NID_Org_Rus" name="Организация, выдавшая документ" 
+                  description="Организация, выдавшая документ, удостоверяющий личность">
       <tns:JavaClassifier className="ia.custom.ru.PassportAuthority" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
       </tns:DataTypeFilter>
    </tns:DataClass>
-   <tns:DataClass id="NID_Dom_Rus" name="Russian passport number"
-                  description="Russian national passport number">
+   <tns:DataClass id="NID_Dom_Rus" name="Номер паспорта гражданина" 
+                  description="Номер внутреннего паспорта гражданина Российской Федерации">
       <tns:JavaClassifier className="ia.custom.ru.PassportDomestic" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
          <tns:LogicalDataType>numeric</tns:LogicalDataType>
       </tns:DataTypeFilter>
    </tns:DataClass>
-   <tns:DataClass id="NID_Frn_Rus" name="Russian foreign passport number"
-                  description="Russian foreign passport number">
+   <tns:DataClass id="NID_Frn_Rus" name="Номер заграничного паспорта" 
+                  description="Номер заграничного паспорта гражданина Российской Федерации">
       <tns:JavaClassifier className="ia.custom.ru.PassportForeign" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
          <tns:LogicalDataType>numeric</tns:LogicalDataType>
       </tns:DataTypeFilter>
    </tns:DataClass>
-   <tns:DataClass id="NameFirst_Rus" name="Russian name first"
-                  description="Russian name first">
+   <tns:DataClass id="NameFirst_Rus" name="Личное имя" 
+                  description="Имя на русском языке">
       <tns:JavaClassifier className="ia.custom.ru.NamesFirst" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
       </tns:DataTypeFilter>
    </tns:DataClass>
-   <tns:DataClass id="NameMiddle_Rus" name="Russian name middle"
-                  description="Russian name middle">
+   <tns:DataClass id="NameMiddle_Rus" name="Личное отчество" 
+                  description="Отчество на русском языке">
       <tns:JavaClassifier className="ia.custom.ru.NamesMiddle" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
       </tns:DataTypeFilter>
    </tns:DataClass>
-   <tns:DataClass id="NameLast_Rus" name="Russian name last"
-                  description="Russian name last">
+   <tns:DataClass id="NameLast_Rus" name="Личная фамилия"
+                  description="Фамилия на русском языке">
       <tns:JavaClassifier className="ia.custom.ru.NamesLast" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
       </tns:DataTypeFilter>
    </tns:DataClass>
-   <tns:DataClass id="NameFull_Rus" name="Russian full name"
-                  description="Russian full name">
+   <tns:DataClass id="NameFull_Rus" name="Личные фамилия, имя, отчество" 
+                  description="Полное значение фамилии, имени, отчества на русском языке">
       <tns:JavaClassifier className="ia.custom.ru.NamesFull" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
       </tns:DataTypeFilter>
    </tns:DataClass>
-   <tns:DataClass id="NameAbbr_Rus" name="Russian name abbreviated"
-                  description="Russian name, with last name plus initials">
+   <tns:DataClass id="NameAbbr_Rus" name="Личные фамилия и инициалы" 
+                  description="Фамилия и инициалы на русском языке">
       <tns:JavaClassifier className="ia.custom.ru.NamesAbbr" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
       </tns:DataTypeFilter>
    </tns:DataClass>
-   <tns:DataClass id="PA_Rus" name="Russian postal address"
-                  description="Postal address in the Russian Federation">
+   <tns:DataClass id="PA_Rus" name="Почтовый адрес" 
+                  description="Почтовый адрес в Российской Федерации">
       <tns:JavaClassifier className="ia.custom.ru.PostalAddress" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
       </tns:DataTypeFilter>
    </tns:DataClass>
-   <tns:DataClass id="Prof_Rus" name="Russian profession"
-                  description="Profession name in Russian">
+   <tns:DataClass id="Prof_Rus" name="Название профессии" 
+                  description="Название профессии">
       <tns:JavaClassifier className="ia.custom.ru.Professions" />
       <tns:DataTypeFilter>
          <tns:LogicalDataType>string</tns:LogicalDataType>
