@@ -1,4 +1,5 @@
 # https://www.ibm.com/docs/en/iis/11.7?topic=cdc-creating-custom-data-class-that-contains-java-classifier
+# into dsenv: OPTIM_DCS_DICT=/path/to/dicts/dir
 
 IAUSER=isadmin
 IAPASS="P@ssw0rd"
