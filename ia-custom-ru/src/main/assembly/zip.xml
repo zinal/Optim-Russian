@@ -25,6 +25,10 @@
         <includes>
             <include>*.xml</include>
         </includes>
+        <excludes>
+            <exclude>*_bak.xml</exclude>
+            <exclude>*.bak.xml</exclude>
+        </excludes>
     </fileSet>
   </fileSets>
 </assembly>
