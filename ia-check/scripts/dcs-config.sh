@@ -8,7 +8,7 @@ IAADMIN=ASBNode/bin/IAAdmin.sh
 IISROOT=/datum/sw/InformationServer
 IISJAR1=ASBNode/lib/java
 IISJAR2=wlp/usr/servers/iis/lib/iis/ia
-JARDST=ia-custom-ru-bundle.jar
-JARSRC=ia-custom-ru-1.0-SNAPSHOT-bundle.jar
+JARDST=iacheck-bundle.jar
+JARSRC=iacheck-1.0-SNAPSHOT-bundle.jar
 
 JARNAME="$IISROOT"/"$IISJAR1"/"$JARDST"
