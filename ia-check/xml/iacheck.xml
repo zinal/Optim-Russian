@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:DataClasses xmlns:tns="http://www.ibm.com/infosphere/ia/classification/DataclassesDefinition"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.ibm.com/infosphere/ia/classification/DataclassesDefinition/ ../../../model/DataClassesDefinition.xsd ">
+   <tns:DataClass id="OGRN_Rus_Check" name="Russian ORGN Check"
+                  description="Russian ORGN Check">
+      <tns:JavaClassifier className="iacheck.OGRN" />
+      <tns:DataTypeFilter>
+         <tns:LogicalDataType>string</tns:LogicalDataType>
+         <tns:LogicalDataType>numeric</tns:LogicalDataType>
+      </tns:DataTypeFilter>
+   </tns:DataClass>
+   <tns:DataClass id="INN_Rus_Check" name="Russian INN Check"
+                  description="Russian INN Check">
+      <tns:JavaClassifier className="iacheck.TaxPayerId" />
+      <tns:DataTypeFilter>
+         <tns:LogicalDataType>string</tns:LogicalDataType>
+         <tns:LogicalDataType>numeric</tns:LogicalDataType>
+      </tns:DataTypeFilter>
+   </tns:DataClass>
+   <tns:DataClass id="SNILS_Rus_Check" name="Russian SNILS Check"
+                  description="Russian SNILS Check">
+      <tns:JavaClassifier className="iacheck.SNILS" />
+      <tns:DataTypeFilter>
+         <tns:LogicalDataType>string</tns:LogicalDataType>
+         <tns:LogicalDataType>numeric</tns:LogicalDataType>
+      </tns:DataTypeFilter>
+   </tns:DataClass>
+</tns:DataClasses>
