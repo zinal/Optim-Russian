@@ -5,6 +5,7 @@
 [Следующий этап](OptimIisClasses).
 
 Выполняется:
+
 1. Отключение автоматического запуска DataStage Flow Designer
 1. Подключение к репозиторию Information Analyzer
 1. Первичная настройка Information Analyzer
@@ -31,7 +32,6 @@
 с помощью скрипта `startCognitiveDesignerServer.bat`, находящегося в подкаталоге
 `ASBNode\CognitiveDesignerEngine` каталога установки Information Server
 (по умолчанию `C:\IBM\InformationServer`).
-
 
 ## 2. Подключение к репозиторию Information Analyzer
 

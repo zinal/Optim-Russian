@@ -26,6 +26,7 @@ WAS CE установлен в каталог
 `optimService.bat`.
 
 Для настройки запуска сервера приложений WAS CE как сервиса необходимо:
+
 1. открыть командную строку `cmd.exe` с правами администратора
 сервера;
 1. перейти в подкаталог `bin` каталога установки сервера приложений
@@ -33,7 +34,8 @@ WAS CE;
 1. выполнить команду `appServerService.exe install`
 
 Пример выполнения соответствующих команд приведён ниже:
-```
+
+```text
 C:\Users\zinal>cd C:\IBM\InfoSphere\Optim\shared\WebSphere\AppServerCommunityEdition
 
 C:\IBM\InfoSphere\Optim\shared\WebSphere\AppServerCommunityEdition>cd bin

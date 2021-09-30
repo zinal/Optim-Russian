@@ -8,9 +8,9 @@ C:\IBM\InformationServer\Server\DSEngine:
 + CLASSPATH=C:/Ditto/JDBC/postgresql-42.2.19.jre6.jar
 + CLASS_NAMES=org.postgresql.Driver
 
-
+```sql
 create schema optimdemo;
 grant all on schema optimdemo to cpd25_icc;
+```
 
-https://www.ibm.com/support/pages/optim-toleration-support-db2-luw-111-and-sql-server-2016
-
+<https://www.ibm.com/support/pages/optim-toleration-support-db2-luw-111-and-sql-server-2016>
