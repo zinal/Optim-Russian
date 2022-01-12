@@ -407,19 +407,20 @@ public class DataGen implements AutoCloseable {
                 while (rs.next()) {
                     genInnLeg.addExisting(rs.getString(1));
                     String reg = rs.getString(2);
+                    String name = rs.getString(3);
                     if (reg!=null && reg.length()>0) {
                         switch (reg.charAt(0)) {
                             case '1':
                                 genOgrnCom.addExisting(reg);
-                                makeComNames().addExisting(reg);
+                                makeComNames().addExisting(name);
                                 break;
                             case '2':
                                 genOgrnGov.addExisting(reg);
-                                makeGovNames().addExisting(reg);
+                                makeGovNames().addExisting(name);
                                 break;
                             default:
                                 genOgrnPhy.addExisting(reg);
-                                makePhyNames().addKnown(rs.getString(3));
+                                makePhyNames().addKnown(name);
                                 break;
                         }
                     }
