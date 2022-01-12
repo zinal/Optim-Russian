@@ -140,7 +140,7 @@ public class OrgNameGen implements ValueGenerator {
         if (pattern.matcher(candidate).matches()) {
             try {
                 int cur = Integer.parseInt(candidate);
-                if (cur>0 && cur<1000000 && cur>iteration)
+                if (cur>0 && cur<1000000 && cur>=iteration)
                     iteration = cur + 1;
             } catch(NumberFormatException nfe) {}
         }

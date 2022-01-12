@@ -62,3 +62,15 @@ CREATE TABLE optim1.contact_email (
   CONSTRAINT email_pk PRIMARY KEY(contid),
   CONSTRAINT email_fk1 FOREIGN KEY(contid) REFERENCES optim1.contact
 );
+
+
+/*
+
+TRUNCATE TABLE optim1.contact_email;
+TRUNCATE TABLE optim1.contact_phone;
+TRUNCATE TABLE optim1.contact CASCADE;
+TRUNCATE TABLE optim1.physical_entity;
+TRUNCATE TABLE optim1.legal_entity;
+TRUNCATE TABLE optim1.customer CASCADE;
+
+*/
