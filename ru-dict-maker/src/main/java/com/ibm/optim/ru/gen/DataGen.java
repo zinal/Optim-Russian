@@ -1,3 +1,24 @@
+/*
+ *  (c) Copyright IBM Corp. 2021 All rights reserved.
+ * 
+ *  The following sample of source code ("Sample") is owned by International
+ *  Business Machines Corporation or one of its subsidiaries ("IBM") and is
+ *  copyrighted and licensed, not sold. You may use, copy, modify, and
+ *  distribute the Sample in any form without payment to IBM.
+ * 
+ *  The Sample code is provided to you on an "AS IS" basis, without warranty of
+ *  any kind. 
+ *  IBM HEREBY EXPRESSLY DISCLAIMS ALL WARRANTIES, EITHER EXPRESS OR
+ *  IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ *  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. Some jurisdictions do
+ *  not allow for the exclusion or limitation of implied warranties, so the above
+ *  limitations or exclusions may not apply to you. IBM shall not be liable for
+ *  any damages you suffer as a result of using, copying, modifying or
+ *  distributing the Sample, even if IBM has been advised of the possibility of
+ *  such damages.
+ * 
+ *  Author:   Maksim Zinal <mzinal@ru.ibm.com>
+ */
 package com.ibm.optim.ru.gen;
 
 import java.io.FileReader;
@@ -11,6 +32,7 @@ import java.time.LocalDate;
 import org.apache.commons.text.RandomStringGenerator;
 import com.ibm.optim.ru.dict.*;
 import com.ibm.optim.ru.supp.DbUtils;
+import java.io.File;
 
 /**
  *
@@ -37,6 +59,7 @@ public class DataGen implements AutoCloseable {
     public static final String PROP_URL = "DbUrl";
     public static final String PROP_USER = "DbUser";
     public static final String PROP_PASS = "DbPassword";
+    public static final String PROP_FLOWERS = "Flowers";
 
     private final Properties props;
 
@@ -48,7 +71,9 @@ public class DataGen implements AutoCloseable {
                    .withinRange(new char[]{' ', ' '}, new char[]{'а', 'я'}, new char[]{'А', 'Я'})
             .build();
 
-    private NamesSource genNames = null;
+    private NamesSource genPhyNames = null;
+    private OrgNameGen genComNames = null;
+    private OrgNameGen genGovNames = null;
     private final ValueGenerator genInnPhy = new InnGen(true, InnGen.Type.Physical);
     private final ValueGenerator genInnLeg = new InnGen(true, InnGen.Type.Legal);
     private final ValueGenerator genOgrnPhy = new OgrnGen(true, OgrnGen.Type.Physical);
@@ -78,6 +103,7 @@ public class DataGen implements AutoCloseable {
     private void run() throws Exception {
        LOG.info("Connected, initializing...");
        con.setAutoCommit(false);
+
        { // Значение соли делаем каждый раз новое
            String salt = props.getProperty(PropNames.PROP_SALT, "");
            if (salt==null || salt.length()==0)
@@ -85,24 +111,26 @@ public class DataGen implements AutoCloseable {
            salt = salt + " " + Long.toHexString(System.currentTimeMillis());
            props.setProperty(PropNames.PROP_SALT, salt);
        }
+
        loadPhysical();
        loadLegal();
+
        LOG.info("Initialized, ready to generate data...");
 
-       for (int i=0; i<10000; i++) {
+       for (int i=0; i<20000; i++) {
            int id = addLegalEntity();
            addPhones(id);
            addEmails(id);
-           logProgress(i, 10000, "legal entities");
+           logProgress(i, 20000, "legal entities");
        }
 
        LOG.info("Legal entitities ready!");
 
-       for (int i=0; i<15000; i++) {
+       for (int i=0; i<150000; i++) {
            int id = addPhysicalEntity();
            addPhones(id);
            addEmails(id);
-           logProgress(i, 15000, "physical entities");
+           logProgress(i, 150000, "physical entities");
        }
 
        LOG.info("Physical entitities ready!");
@@ -112,15 +140,35 @@ public class DataGen implements AutoCloseable {
        LOG.info("Transaction committed!");
     }
 
-    private NamesSource makeNames() throws Exception {
-        if (genNames==null) {
+    private NamesSource makePhyNames() throws Exception {
+        if (genPhyNames==null) {
             LOG.info("Loading names dictionary...");
-            genNames = new NamesSourceBuilder().loadNames(props);
-            genNames.setAntiDupProtection(true);
-            genNames.setReorder(true);
+            genPhyNames = new NamesSourceBuilder().loadNames(props);
+            genPhyNames.setAntiDupProtection(true);
+            genPhyNames.setReorder(true);
             LOG.info("Names dictionary ready!");
         }
-        return genNames;
+        return genPhyNames;
+    }
+
+    private OrgNameGen makeComNames() throws Exception {
+        if (genComNames==null) {
+            LOG.info("Loading COMMERCIAL dictionary...");
+            File f = new File(props.getProperty(PROP_FLOWERS, "dict/flowers.txt"));
+            genComNames = new OrgNameGen(f, true);
+            LOG.info("COMMERCIAL dictionary ready!");
+        }
+        return genComNames;
+    }
+
+    private OrgNameGen makeGovNames() throws Exception {
+        if (genGovNames==null) {
+            LOG.info("Loading GOVERNMENTAL dictionary...");
+            File f = new File(props.getProperty(PROP_FLOWERS, "dict/flowers.txt"));
+            genGovNames = new OrgNameGen(f, false);
+            LOG.info("GOVERNMENTAL dictionary ready!");
+        }
+        return genGovNames;
     }
 
     private int addCustomer(boolean physical) throws Exception {
@@ -146,20 +194,23 @@ public class DataGen implements AutoCloseable {
         if ( coin.nextBoolean() ) {
             // ИП
             if (coin.nextBoolean()) {
-                name = makeNames().nextFemale().full;
+                name = makePhyNames().nextFemale().full;
             } else {
-                name = makeNames().nextMale().full;
+                name = makePhyNames().nextMale().full;
             }
             regno = genOgrnPhy.nextValue();
             payno = genInnPhy.nextValue();
-        } else if ( coin.nextBoolean() && coin.nextBoolean() ) {
+        } else if ( coin.nextBoolean() 
+                && coin.nextBoolean() 
+                && coin.nextBoolean()
+                && coin.nextBoolean() ) {
             // Гос. организация
-            name = "Министерство " + boober.generate(5, 40);
+            name = makeGovNames().nextValue();
             regno = genOgrnGov.nextValue();
             payno = genInnLeg.nextValue();
         } else {
             // Коммерческая структура
-            name = "ООО " + boober.generate(5, 40);
+            name = makeComNames().nextValue();
             regno = genOgrnCom.nextValue();
             payno = genInnLeg.nextValue();
         }
@@ -182,7 +233,7 @@ public class DataGen implements AutoCloseable {
         int id = addCustomer(true);
 
         boolean sex = coin.nextBoolean();
-        NameValues name = sex ? genNames.nextFemale() : genNames.nextMale();
+        NameValues name = sex ? genPhyNames.nextFemale() : genPhyNames.nextMale();
         String payno = genInnPhy.nextValue();
         String socno = genSnils.nextValue();
         LocalDate dateBirth = LocalDate.now();
@@ -341,7 +392,7 @@ public class DataGen implements AutoCloseable {
                 + "pe_num_pay, pe_num_soc FROM optim1.physical_entity")) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    makeNames().addKnown(rs.getString(1));
+                    makePhyNames().addKnown(rs.getString(1));
                     genInnPhy.addExisting(rs.getString(2));
                     genSnils.addExisting(rs.getString(3));
                 }
@@ -360,13 +411,15 @@ public class DataGen implements AutoCloseable {
                         switch (reg.charAt(0)) {
                             case '1':
                                 genOgrnCom.addExisting(reg);
+                                makeComNames().addExisting(reg);
                                 break;
                             case '2':
                                 genOgrnGov.addExisting(reg);
+                                makeGovNames().addExisting(reg);
                                 break;
                             default:
                                 genOgrnPhy.addExisting(reg);
-                                makeNames().addKnown(rs.getString(3));
+                                makePhyNames().addKnown(rs.getString(3));
                                 break;
                         }
                     }

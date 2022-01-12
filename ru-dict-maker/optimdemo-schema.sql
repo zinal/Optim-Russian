@@ -1,7 +1,5 @@
 CREATE SCHEMA optim1;
 
-DROP TABLE optim1.physical_entity;
-
 CREATE SEQUENCE optim1.customer_seq;
 
 CREATE TABLE optim1.customer (
