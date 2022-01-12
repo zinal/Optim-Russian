@@ -129,8 +129,7 @@ public class FioDbWriter extends DbUtils implements AutoCloseable {
         deleteFiles(pathname);
         final Connection con = DriverManager.getConnection
             (makeH2Url(pathname)
-                    + ";COMPRESS=YES"
-                    + ";LOG=0;CACHE_SIZE=65536;LOCK_MODE=0;UNDO_LOG=0");
+                + ";COMPRESS=YES;PAGE_SIZE=32768;CACHE_SIZE=65536;LOCK_MODE=0");
         try {
             con.setAutoCommit(false);
             createTables(con, SQL_CREATE);
