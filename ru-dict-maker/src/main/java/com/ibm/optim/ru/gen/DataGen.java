@@ -117,20 +117,22 @@ public class DataGen implements AutoCloseable {
 
        LOG.info("Initialized, ready to generate data...");
 
-       for (int i=0; i<20000; i++) {
+       final int nlegal = 5000;
+       for (int i=0; i < nlegal; i++) {
            int id = addLegalEntity();
            addPhones(id);
            addEmails(id);
-           logProgress(i, 20000, "legal entities");
+           logProgress(i, nlegal, "legal entities");
        }
 
        LOG.info("Legal entitities ready!");
 
-       for (int i=0; i<150000; i++) {
+       final int nphysical = 50000;
+       for (int i=0; i<nphysical; i++) {
            int id = addPhysicalEntity();
            addPhones(id);
            addEmails(id);
-           logProgress(i, 150000, "physical entities");
+           logProgress(i, nphysical, "physical entities");
        }
 
        LOG.info("Physical entitities ready!");
@@ -202,7 +204,6 @@ public class DataGen implements AutoCloseable {
             payno = genInnPhy.nextValue();
         } else if ( coin.nextBoolean() 
                 && coin.nextBoolean() 
-                && coin.nextBoolean()
                 && coin.nextBoolean() ) {
             // Гос. организация
             name = makeGovNames().nextValue();
