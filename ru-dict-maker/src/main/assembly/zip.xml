@@ -41,6 +41,9 @@
             <include>*.cmd</include>
             <include>*.bat</include>
         </includes>
+        <excludes>
+            <exclude>licenseheader.txt</exclude>
+        </excludes>
     </fileSet>
   </fileSets>
   <dependencySets>
