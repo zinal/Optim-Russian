@@ -1,3 +1,8 @@
+-- Table structure for demonstration of data masking.
+-- Checked on Db2 and PostgreSQL.
+-- For Db2, nextval() function definition is needed (see below).
+-- For both Db2 and PostgreSQL, optim1.onerow view is needed.
+
 CREATE SCHEMA optim1;
 
 CREATE SEQUENCE optim1.customer_seq;
@@ -65,7 +70,7 @@ CREATE TABLE optim1.contact_email (
 
 /*
 
-CREATE VIEW optim1.onerow AS SELECT CHAR('A', 1) AS X;
+CREATE VIEW optim1.onerow AS SELECT CAST('A' AS CHAR(1)) AS X;
 
 db2 -td@
 
