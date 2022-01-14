@@ -63,6 +63,29 @@ CREATE TABLE optim1.contact_email (
   CONSTRAINT email_fk1 FOREIGN KEY(contid) REFERENCES optim1.contact
 );
 
+/*
+
+CREATE VIEW optim1.onerow AS SELECT CHAR('A', 1) AS X;
+
+db2 -td@
+
+CREATE VIEW optim1.onerow AS SELECT CHAR('A', 1) AS X FROM (VALUES(1)) y @
+
+CREATE OR REPLACE FUNCTION nextval(IN seq VARCHAR(100)) RETURNS BIGINT
+  LANGUAGE SQL READS SQL DATA
+BEGIN
+  DECLARE retval BIGINT;
+  DECLARE stmt1 STATEMENT;
+  DECLARE cur1 CURSOR FOR stmt1;
+  PREPARE stmt1 FROM ('values next value for ' || seq);
+  OPEN cur1;
+  FETCH FROM cur1 INTO retval;
+  CLOSE cur1;
+  RETURN retval;
+END @
+
+*/
+
 
 /*
 

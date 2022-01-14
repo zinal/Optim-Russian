@@ -28,8 +28,6 @@
         <outputDirectory>.</outputDirectory>
         <includes>
             <include>*.sh</include>
-            <include>*.cmd</include>
-            <include>*.bat</include>
         </includes>
         <fileMode>750</fileMode>
     </fileSet>
@@ -40,6 +38,8 @@
             <include>*.templ</include>
             <include>*.sql</include>
             <include>*.txt</include>
+            <include>*.cmd</include>
+            <include>*.bat</include>
         </includes>
     </fileSet>
   </fileSets>

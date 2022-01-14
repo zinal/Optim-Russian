@@ -85,9 +85,11 @@ public class DataGen implements AutoCloseable {
     private final ValueGenerator genPhone = new PhoneGen();
     private final ValueGenerator genEmail = new EmailGen();
 
+    private PreparedStatement psCustomerId = null;
     private PreparedStatement psCustomer = null;
     private PreparedStatement psLegal = null;
     private PreparedStatement psPhysical = null;
+    private PreparedStatement psContactId = null;
     private PreparedStatement psContact = null;
     private PreparedStatement psPhone = null;
     private PreparedStatement psEmail = null;
@@ -174,16 +176,23 @@ public class DataGen implements AutoCloseable {
     }
 
     private int addCustomer(boolean physical) throws Exception {
-        if (psCustomer==null) {
-            psCustomer = con.prepareStatement("INSERT INTO optim1.customer(custid, custmode)"
-                    + " VALUES(nextval('optim1.customer_seq'),?) RETURNING custid");
+        if ( psCustomerId == null ) {
+            psCustomerId = con.prepareStatement(
+                    "SELECT nextval('optim1.customer_seq') FROM optim1.onerow");
         }
-        psCustomer.setString(1, physical ? "P" : "L");
-        psCustomer.execute();
-        try (ResultSet rs = psCustomer.getResultSet()) {
+        int customerId;
+        try (ResultSet rs = psCustomerId.executeQuery()) {
             rs.next();
-            return rs.getInt(1);
+            customerId = rs.getInt(1);
         }
+        if (psCustomer==null) {
+            psCustomer = con.prepareStatement(
+                    "INSERT INTO optim1.customer(custid, custmode) VALUES(?,?)");
+        }
+        psCustomer.setInt(1, customerId);
+        psCustomer.setString(2, physical ? "P" : "L");
+        psCustomer.executeUpdate();
+        return customerId;
     }
 
     private int addLegalEntity() throws Exception {
@@ -295,26 +304,31 @@ public class DataGen implements AutoCloseable {
     };
 
     private int addContact(int customer, ContactType ct) throws Exception {
+        if ( psContactId == null ) {
+            psContactId = con.prepareStatement(
+                    "SELECT nextval('optim1.contact_seq') FROM optim1.onerow");
+        }
+        int contactId;
+        try (ResultSet rs = psContactId.executeQuery()) {
+            rs.next();
+            contactId = rs.getInt(1);
+        }
         if ( psContact == null ) {
             psContact = con.prepareStatement("INSERT INTO optim1.contact "
-                    + "(contid, custid, contmode) "
-                    + "VALUES (nextval('optim1.customer_seq'), ?, ?) "
-                    + "RETURNING contid");
+                    + "(contid, custid, contmode) VALUES (?, ?, ?) ");
         }
-        psContact.setInt(1, customer);
+        psContact.setInt(1, contactId);
+        psContact.setInt(2, customer);
         switch (ct) {
             case Email:
-                psContact.setString(2, "E");
+                psContact.setString(3, "E");
                 break;
             case Phone:
-                psContact.setString(2, "P");
+                psContact.setString(3, "P");
                 break;
         }
-        psContact.execute();
-        try (ResultSet rs = psContact.getResultSet()) {
-            rs.next();
-            return rs.getInt(1);
-        }
+        psContact.executeUpdate();
+        return contactId;
     }
 
     private int addPhone(int customer) throws Exception {
@@ -370,12 +384,14 @@ public class DataGen implements AutoCloseable {
 
     @Override
     public void close() {
-        DbUtils.close(psCustomer);  psCustomer = null;
-        DbUtils.close(psLegal);     psLegal = null;
-        DbUtils.close(psPhysical);  psPhysical = null;
-        DbUtils.close(psContact);   psContact = null;
-        DbUtils.close(psPhone);     psPhone = null;
-        DbUtils.close(psEmail);     psEmail = null;
+        DbUtils.close(psCustomerId);  psCustomerId = null;
+        DbUtils.close(psCustomer);    psCustomer = null;
+        DbUtils.close(psLegal);       psLegal = null;
+        DbUtils.close(psPhysical);    psPhysical = null;
+        DbUtils.close(psContactId);   psContactId = null;
+        DbUtils.close(psContact);     psContact = null;
+        DbUtils.close(psPhone);       psPhone = null;
+        DbUtils.close(psEmail);       psEmail = null;
         if (con!=null) {
             try {
                 if (!con.isReadOnly())
