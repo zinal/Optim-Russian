@@ -132,6 +132,7 @@ public class FioDbWriter extends DbUtils implements AutoCloseable {
     /**
      * Create a new database, throwing the exception if one exists.
      * @param pathname Path to the database
+     * @param action Table action
      * @throws Exception In case of an error
      */
     public void create(String pathname, TableAction action) throws Exception {
@@ -148,11 +149,19 @@ public class FioDbWriter extends DbUtils implements AutoCloseable {
             try { con.rollback(); } catch(Exception xx) {}
             try { con.close(); } catch(Exception xx) {}
             deleteFiles(pathname);
-            throw new Exception("Table creation failed", ex);
+            throw new Exception("Table action failed", ex);
         }
         this.connection = con;
     }
 
+    /**
+     * Open a database connection through JDBC URL
+     * @param url
+     * @param username
+     * @param password
+     * @param action Table action
+     * @throws Exception 
+     */
     public void openUrl(String url, String username, String password, 
             TableAction action) throws Exception {
         final Connection con
@@ -164,7 +173,7 @@ public class FioDbWriter extends DbUtils implements AutoCloseable {
         } catch(Exception ex) {
             try { con.rollback(); } catch(Exception xx) {}
             try { con.close(); } catch(Exception xx) {}
-            throw new Exception("Table creation failed", ex);
+            throw new Exception("Table action failed", ex);
         }
         this.connection = con;
     }
