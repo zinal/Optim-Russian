@@ -245,7 +245,7 @@ public class FioDbWriter extends DbUtils implements AutoCloseable {
         psAddAny.setString(3, nv.first);
         psAddAny.setString(4, nv.middle);
         psAddAny.setString(5, nv.last);
-        psAddAny.setString(6, male ? "M" : "T");
+        psAddAny.setString(6, male ? "M" : "F");
         psAddAny.addBatch();
         final PreparedStatement ps;
         if (male) {
