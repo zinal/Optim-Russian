@@ -14,8 +14,8 @@
                 <exec.executable>java</exec.executable>
                 <exec.workingdir>.</exec.workingdir>
                 <exec.vmArgs></exec.vmArgs>
-                <exec.appArgs></exec.appArgs>
-                <exec.mainClass>com.ibm.optim.ru.gen.DataGen</exec.mainClass>
+                <exec.appArgs>dict-maker.xml</exec.appArgs>
+                <exec.mainClass>com.ibm.optim.ru.dict.DictFio</exec.mainClass>
             </properties>
         </action>
         <action>
@@ -33,8 +33,8 @@
                 <jpda.listen>true</jpda.listen>
                 <exec.workingdir>.</exec.workingdir>
                 <exec.vmArgs>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</exec.vmArgs>
-                <exec.appArgs></exec.appArgs>
-                <exec.mainClass>com.ibm.optim.ru.gen.DataGen</exec.mainClass>
+                <exec.appArgs>dict-maker.xml</exec.appArgs>
+                <exec.mainClass>com.ibm.optim.ru.dict.DictFio</exec.mainClass>
             </properties>
         </action>
         <action>
@@ -51,8 +51,8 @@
                 <exec.executable>java</exec.executable>
                 <exec.workingdir>.</exec.workingdir>
                 <exec.vmArgs></exec.vmArgs>
-                <exec.appArgs></exec.appArgs>
-                <exec.mainClass>com.ibm.optim.ru.gen.DataGen</exec.mainClass>
+                <exec.appArgs>dict-maker.xml</exec.appArgs>
+                <exec.mainClass>com.ibm.optim.ru.dict.DictFio</exec.mainClass>
             </properties>
         </action>
     </actions>

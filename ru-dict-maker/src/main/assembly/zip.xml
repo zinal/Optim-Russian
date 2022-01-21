@@ -36,6 +36,7 @@
         <outputDirectory>.</outputDirectory>
         <includes>
             <include>*.templ</include>
+            <include>*.xml</include>
             <include>*.sql</include>
             <include>*.txt</include>
             <include>*.cmd</include>
@@ -43,6 +44,8 @@
         </includes>
         <excludes>
             <exclude>licenseheader.txt</exclude>
+            <exclude>data-sample.properties</exclude>
+            <exclude>dict-maker.xml</exclude>
         </excludes>
     </fileSet>
   </fileSets>

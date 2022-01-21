@@ -45,10 +45,13 @@ public class DictFio extends PropNames {
     }
 
     private void run() throws Exception {
+        // Create or truncate tables?
+        final TableAction action = TableAction.valueOf(
+                props.getProperty(PROP_TABACT, TableAction.CREATE.name()));
         try (FioDbWriter fgen = new FioDbWriter(props)) {
             final String dbName = props.getProperty(PROP_DBNAME);
             if (dbName!=null) {
-                fgen.create(dbName);
+                fgen.create(dbName, action);
             } else {
                 final String dbUrl = props.getProperty(PROP_DBURL);
                 final String dbUser = props.getProperty(PROP_DBUSER);
@@ -57,7 +60,7 @@ public class DictFio extends PropNames {
                     throw new IllegalArgumentException("Incorrect configuration:"
                             + " either DbName or DbUrl must be specified");
                 }
-                fgen.openUrl(dbUrl, dbUser, dbPass);
+                fgen.openUrl(dbUrl, dbUser, dbPass, action);
             }
             LOG.info("Target database open.");
             fgen.generate(Integer.valueOf(props.getProperty(PROP_TOTNAMES)));

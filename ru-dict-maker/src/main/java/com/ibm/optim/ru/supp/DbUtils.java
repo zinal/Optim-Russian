@@ -77,7 +77,7 @@ public class DbUtils {
         return "jdbc:h2:" + resolvePath(pathname).replaceAll("\\\\", "/");
     }
 
-    public static void createTables(Connection con, String[] cmds)
+    public static void runSql(Connection con, String[] cmds)
             throws Exception {
         try (Statement stmt = con.createStatement()) {
             for (String sql : cmds)

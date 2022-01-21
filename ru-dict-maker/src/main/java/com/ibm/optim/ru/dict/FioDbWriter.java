@@ -73,6 +73,15 @@ public class FioDbWriter extends DbUtils implements AutoCloseable {
             + "sex CHAR(1) NOT NULL)"
     };
 
+    private static final String[] SQL_TRUNCATE = {
+        "TRUNCATE TABLE dict_fio",
+        "TRUNCATE TABLE dict_fio_male",
+        "TRUNCATE TABLE dict_fio_female",
+        "TRUNCATE TABLE dict_name_last",
+        "TRUNCATE TABLE dict_name_first",
+        "TRUNCATE TABLE dict_name_middle"
+    };
+
     private Connection connection;
     private PreparedStatement psAddMale;
     private PreparedStatement psAddFemale;
@@ -125,14 +134,15 @@ public class FioDbWriter extends DbUtils implements AutoCloseable {
      * @param pathname Path to the database
      * @throws Exception In case of an error
      */
-    public void create(String pathname) throws Exception {
-        deleteFiles(pathname);
+    public void create(String pathname, TableAction action) throws Exception {
+        if (TableAction.CREATE.equals(action))
+            deleteFiles(pathname);
         final Connection con = DriverManager.getConnection
             (makeH2Url(pathname)
                 + ";COMPRESS=YES;PAGE_SIZE=32768;CACHE_SIZE=65536;LOCK_MODE=0");
         try {
             con.setAutoCommit(false);
-            createTables(con, SQL_CREATE);
+            runAction(con, action);
             con.commit();
         } catch(Exception ex) {
             try { con.rollback(); } catch(Exception xx) {}
@@ -143,13 +153,13 @@ public class FioDbWriter extends DbUtils implements AutoCloseable {
         this.connection = con;
     }
 
-    public void openUrl(String url, String username, String password)
-            throws Exception {
+    public void openUrl(String url, String username, String password, 
+            TableAction action) throws Exception {
         final Connection con
                 = DriverManager.getConnection(url, username, password);
         try {
             con.setAutoCommit(false);
-            createTables(con, SQL_CREATE);
+            runAction(con, action);
             con.commit();
         } catch(Exception ex) {
             try { con.rollback(); } catch(Exception xx) {}
@@ -157,6 +167,17 @@ public class FioDbWriter extends DbUtils implements AutoCloseable {
             throw new Exception("Table creation failed", ex);
         }
         this.connection = con;
+    }
+
+    private void runAction(Connection con, TableAction action) throws Exception {
+        switch (action) {
+            case CREATE:
+                runSql(con, SQL_CREATE);
+                break;
+            case TRUNCATE:
+                runSql(con, SQL_TRUNCATE);
+                break;
+        }
     }
 
     public void generate(int count) throws Exception {
