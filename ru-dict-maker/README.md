@@ -134,6 +134,23 @@ HASH_LOOKUP(PERSON_FULL_NAME, TRIM=( ,\u),DICTDBNAME.DICTZ.DICT_FIO(ID,NFULL))
 
 ### Вариант на основе IBM Optim Data Privacy Providers Library
 
+Выражение IBM Optim Data Privacy Providers с использованием сервиса
+[HASH_LOOKUP](https://www.ibm.com/docs/en/iotdm/11.3?topic=lp-hash-lookup-service-provider):
+
+```
+TRANS PRO=HASH_LOOKUP, HASHFLD="ID", SOURCE="PERSON_FULL_NAME", REPLACE="NFULL", 
+ID="DICTZ.DICT_FIO", PRENULL="PERSON_FULL_NAME", CASE=UP,
+lib=DB2LUW, user=db2admin, pass=Gbhd0kfq, conn=DICTDBNAME,
+FLDDEF1=(NAME="PERSON_FULL_NAME",DT=varchar_sz)
+```
+
+Приведённое выше выражение формирует результат маскирования на основе исходного
+значения поля PERSON_FULL_NAME маскируемой таблицы. Исходное значение перед
+расчётом хеш-кода переводится в верхний регистр.
+
+Для обращения к таблице справочника `DICT_FIO` в схеме `DICTZ` используется
+драйвер IBM Db2, в котором должно быть настроено логическое подключение к БД
+`DICTDBNAME`. Логин и пароль указываются явным образом.
 
 
 ## Использование генератора примера данных для маскирования
