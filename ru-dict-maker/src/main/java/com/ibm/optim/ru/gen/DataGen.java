@@ -127,11 +127,11 @@ public class DataGen implements AutoCloseable {
         final int nphysical = 50000;
         int ilegal = 0, iphysical = 0;
         int irecords = 0;
-        while ((ilegal < nlegal) && (iphysical < nphysical)) {
+        while ((ilegal < nlegal) || (iphysical < nphysical)) {
             if (ilegal < nlegal) {
                 if ( (iphysical >= nphysical) // физ. лица сгенерированы
                         || (coin.nextBoolean() && coin.nextBoolean()
-                            && coin.nextBoolean() && coin.nextBoolean()) ) {
+                            && coin.nextBoolean()) ) {
                     int id = addLegalEntity();
                     addPhones(id);
                     addEmails(id);
