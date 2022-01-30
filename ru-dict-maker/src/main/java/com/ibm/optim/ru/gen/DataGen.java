@@ -226,6 +226,7 @@ public class DataGen implements AutoCloseable {
             } else {
                 name = makePhyNames().nextMale().full;
             }
+            name = "ИП " + name;
             regno = genOgrnPhy.nextValue();
             payno = genInnPhy.nextValue();
         } else if ( coin.nextBoolean() 

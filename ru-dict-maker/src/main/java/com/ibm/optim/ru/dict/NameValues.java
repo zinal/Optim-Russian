@@ -40,5 +40,22 @@ public class NameValues {
                 ((middle==null || middle.length()==0) ? ""
                 : " " + middle);
     }
+    
+    public String getAbbrev() {
+        if (first.length() > 0) {
+            if (middle.length() > 0) {
+                return last + " " + first.substring(0, 1) + "." 
+                        + middle.substring(0, 1) + ".";
+            } else {
+                return last + " " + first.substring(0, 1) + ".";
+            }
+        } else {
+            if (middle.length() > 0) {
+                return last + " " + middle.substring(0, 1) + ".";
+            } else {
+                return last;
+            }
+        }
+    }
 
 }

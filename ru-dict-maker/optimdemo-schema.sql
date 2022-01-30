@@ -93,12 +93,22 @@ END @
 
 
 /*
-
+-- PostgreSQL
 TRUNCATE TABLE optim1.contact_email;
 TRUNCATE TABLE optim1.contact_phone;
 TRUNCATE TABLE optim1.contact CASCADE;
 TRUNCATE TABLE optim1.physical_entity;
 TRUNCATE TABLE optim1.legal_entity;
 TRUNCATE TABLE optim1.customer CASCADE;
-
+-- Db2
+LOAD FROM nul OF DEL REPLACE INTO optim1.contact_email;
+LOAD FROM nul OF DEL REPLACE INTO optim1.contact_phone;
+LOAD FROM nul OF DEL REPLACE INTO optim1.contact;
+LOAD FROM nul OF DEL REPLACE INTO optim1.physical_entity;
+LOAD FROM nul OF DEL REPLACE INTO optim1.legal_entity;
+LOAD FROM nul OF DEL REPLACE INTO optim1.customer;
+SET INTEGRITY FOR
+  optim1.contact, optim1.contact_email, optim1.contact_phone,
+  optim1.customer, optim1.physical_entity, optim1.legal_entity
+IMMEDIATE CHECKED;
 */
