@@ -103,45 +103,64 @@ public class DataGen implements AutoCloseable {
     }
 
     private void run() throws Exception {
-       LOG.info("Connected, initializing...");
-       con.setAutoCommit(false);
+        LOG.info("Connected, initializing...");
+        con.setAutoCommit(false);
 
-       { // Значение соли делаем каждый раз новое
-           String salt = props.getProperty(PropNames.PROP_SALT, "");
-           if (salt==null || salt.length()==0)
-               salt = "-";
-           salt = salt + " " + Long.toHexString(System.currentTimeMillis());
-           props.setProperty(PropNames.PROP_SALT, salt);
-       }
+        { // Значение соли делаем каждый раз новое
+            String salt = props.getProperty(PropNames.PROP_SALT, "");
+            if (salt==null || salt.length()==0)
+                salt = "-";
+            salt = salt + " " + Long.toHexString(System.currentTimeMillis());
+            props.setProperty(PropNames.PROP_SALT, salt);
+        }
+        
+        makeComNames();
+        makePhyNames();
+        makeGovNames();
 
-       loadPhysical();
-       loadLegal();
+        loadPhysical();
+        loadLegal();
 
-       LOG.info("Initialized, ready to generate data...");
+        LOG.info("Initialized, ready to generate data...");
 
-       final int nlegal = 5000;
-       for (int i=0; i < nlegal; i++) {
-           int id = addLegalEntity();
-           addPhones(id);
-           addEmails(id);
-           logProgress(i, nlegal, "legal entities");
-       }
+        final int nlegal = 5000;
+        final int nphysical = 50000;
+        int ilegal = 0, iphysical = 0;
+        int irecords = 0;
+        while ((ilegal < nlegal) && (iphysical < nphysical)) {
+            if (ilegal < nlegal) {
+                if ( (iphysical >= nphysical) // физ. лица сгенерированы
+                        || (coin.nextBoolean() && coin.nextBoolean()
+                            && coin.nextBoolean() && coin.nextBoolean()) ) {
+                    int id = addLegalEntity();
+                    addPhones(id);
+                    addEmails(id);
+                    ilegal += 1;
+                    if (++irecords > 1000) {
+                        irecords = 0;
+                        con.commit();
+                    }
+                }
+            }
+            if (iphysical < nphysical) {
+                int id = addPhysicalEntity();
+                addPhones(id);
+                addEmails(id);
+                iphysical += 1;
+                if (++irecords > 1000) {
+                    irecords = 0;
+                    con.commit();
+                }
+            }
+            logProgress(ilegal, nlegal, iphysical, nphysical);
+        }
 
-       LOG.info("Legal entitities ready!");
+        logProgress(ilegal, nlegal, iphysical, nphysical);
 
-       final int nphysical = 50000;
-       for (int i=0; i<nphysical; i++) {
-           int id = addPhysicalEntity();
-           addPhones(id);
-           addEmails(id);
-           logProgress(i, nphysical, "physical entities");
-       }
+        if (irecords > 0)
+            con.commit();
 
-       LOG.info("Physical entitities ready!");
-
-       con.commit();
-
-       LOG.info("Transaction committed!");
+        LOG.info("Data generated!");
     }
 
     private NamesSource makePhyNames() throws Exception {
@@ -284,17 +303,23 @@ public class DataGen implements AutoCloseable {
 
     private long lastLogProgress = 0L;
 
-    private void logProgress(int ncurrent, int ntotal, String xtype) {
+    private void logProgress(int ilegal, int nlegal, 
+            int iphysical, int nphysical) {
+        if ( (ilegal >= nlegal) && (iphysical >= nphysical) ) {
+            LOG.info("** Completed: {} legal, {} physical", ilegal, iphysical);
+            return;
+        }
         if (lastLogProgress==0L) {
             lastLogProgress = System.currentTimeMillis();
             return;
         }
-        if (ncurrent % 10 != 0)
+        if (iphysical % 10 != 0)
             return;
         long tv = System.currentTimeMillis();
         if (tv-lastLogProgress >= 5000L) {
             lastLogProgress = tv;
-            LOG.info("** Progress: {} of {} at {}", ncurrent, ntotal, xtype);
+            LOG.info("** Progress: {}/{} legal, {}/{} physical",
+                    ilegal, nlegal, iphysical, nphysical);
         }
     }
 
