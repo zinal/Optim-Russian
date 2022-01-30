@@ -113,10 +113,14 @@ public class DataGen implements AutoCloseable {
             salt = salt + " " + Long.toHexString(System.currentTimeMillis());
             props.setProperty(PropNames.PROP_SALT, salt);
         }
-        
+
+        LOG.info("Loading dictionaries...");
+
         makeComNames();
         makePhyNames();
         makeGovNames();
+
+        LOG.info("Loading current data...");
 
         loadPhysical();
         loadLegal();
@@ -128,6 +132,7 @@ public class DataGen implements AutoCloseable {
         int ilegal = 0, iphysical = 0;
         int irecords = 0;
         while ((ilegal < nlegal) || (iphysical < nphysical)) {
+            logProgress(ilegal, nlegal, iphysical, nphysical);
             if (ilegal < nlegal) {
                 if ( (iphysical >= nphysical) // физ. лица сгенерированы
                         || (coin.nextBoolean() && coin.nextBoolean()
@@ -152,7 +157,6 @@ public class DataGen implements AutoCloseable {
                     con.commit();
                 }
             }
-            logProgress(ilegal, nlegal, iphysical, nphysical);
         }
 
         logProgress(ilegal, nlegal, iphysical, nphysical);
@@ -165,31 +169,25 @@ public class DataGen implements AutoCloseable {
 
     private NamesSource makePhyNames() throws Exception {
         if (genPhyNames==null) {
-            LOG.info("Loading names dictionary...");
             genPhyNames = new NamesSourceBuilder().loadNames(props);
             genPhyNames.setAntiDupProtection(true);
             genPhyNames.setReorder(true);
-            LOG.info("Names dictionary ready!");
         }
         return genPhyNames;
     }
 
     private OrgNameGen makeComNames() throws Exception {
         if (genComNames==null) {
-            LOG.info("Loading COMMERCIAL dictionary...");
             File f = new File(props.getProperty(PROP_FLOWERS, "dict/flowers.txt"));
             genComNames = new OrgNameGen(f, true);
-            LOG.info("COMMERCIAL dictionary ready!");
         }
         return genComNames;
     }
 
     private OrgNameGen makeGovNames() throws Exception {
         if (genGovNames==null) {
-            LOG.info("Loading GOVERNMENTAL dictionary...");
             File f = new File(props.getProperty(PROP_FLOWERS, "dict/flowers.txt"));
             genGovNames = new OrgNameGen(f, false);
-            LOG.info("GOVERNMENTAL dictionary ready!");
         }
         return genGovNames;
     }
