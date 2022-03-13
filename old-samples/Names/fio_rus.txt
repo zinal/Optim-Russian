@@ -1,0 +1,25 @@
+create table convz.optim_fio (
+  nm_first varchar(100) not null, 
+  nm_second varchar(100) not null, 
+  nm_last varchar(100) not null
+);
+
+alter table convz.optim_fio compress yes activate value compression;
+
+create index convz.optim_fio_idx1 on convz.optim_fio(nm_last, nm_first, nm_second) compress yes;
+
+declare x1 cursor for
+select nm1.name, nm2.pm, fm.name
+from convz.optim_names_m nm1, convz.optim_names_m nm2, convz.optim_fam_m fm
+fetch first 1000000 rows only;
+
+load from x1 of cursor replace into convz.optim_fio nonrecoverable;
+
+
+SELECT CAST(nm_first AS VARCHAR(30)) fn, 
+       CAST(nm_second AS VARCHAR(30)) mn
+FROM convz.optim_fio
+WHERE nm_last='Абросимов'
+ORDER BY nm_first DESC, nm_last DESC
+FETCH FIRST 5 ROWS ONLY;
+
