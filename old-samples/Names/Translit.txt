@@ -1,0 +1,11 @@
+
+D:\OptimData\Config\Names>C:\IBM\SQLLIB\java\jdk\bin\javac Translit.java
+
+D:\OptimData\Config\Names>C:\IBM\SQLLIB\java\jdk\bin\jar cvf Translit.jar Translit.class
+
+db2 => call sqlj.install_jar('file:D:\OptimData\Config\Names\Translit.jar', 'TRANSLITJAR');
+DB20000I  Команда CALL выполнена успешно.
+
+db2 => CREATE OR REPLACE FUNCTION convz.translit(varchar(2000)) RETURNS VARCHAR(2000) LANGUAGE JAVA
+db2 (прод.) => PARAMETER STYLE JAVA DETERMINISTIC NO EXTERNAL ACTION NO SQL
+db2 (прод.) => EXTERNAL NAME 'TRANSLITJAR:Translit.map';
